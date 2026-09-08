@@ -9,50 +9,93 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppLayoutRouteRouteImport } from './routes/_appLayout/route'
+import { Route as AppLayoutIndexRouteImport } from './routes/_appLayout/index'
+import { Route as AppLayoutMoviesIndexRouteImport } from './routes/_appLayout/movies/index'
 
-const IndexRoute = IndexRouteImport.update({
+const AppLayoutRouteRoute = AppLayoutRouteRouteImport.update({
+  id: '/_appLayout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppLayoutIndexRoute = AppLayoutIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppLayoutRouteRoute,
+} as any)
+const AppLayoutMoviesIndexRoute = AppLayoutMoviesIndexRouteImport.update({
+  id: '/movies/',
+  path: '/movies/',
+  getParentRoute: () => AppLayoutRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AppLayoutIndexRoute
+  '/movies/': typeof AppLayoutMoviesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof AppLayoutIndexRoute
+  '/movies': typeof AppLayoutMoviesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_appLayout': typeof AppLayoutRouteRouteWithChildren
+  '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_appLayout/movies/': typeof AppLayoutMoviesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/movies/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/movies'
+  id: '__root__' | '/_appLayout' | '/_appLayout/' | '/_appLayout/movies/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppLayoutRouteRoute: typeof AppLayoutRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_appLayout': {
+      id: '/_appLayout'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppLayoutRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_appLayout/': {
+      id: '/_appLayout/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppLayoutIndexRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
+    }
+    '/_appLayout/movies/': {
+      id: '/_appLayout/movies/'
+      path: '/movies'
+      fullPath: '/movies/'
+      preLoaderRoute: typeof AppLayoutMoviesIndexRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
     }
   }
 }
 
+interface AppLayoutRouteRouteChildren {
+  AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutMoviesIndexRoute: typeof AppLayoutMoviesIndexRoute
+}
+
+const AppLayoutRouteRouteChildren: AppLayoutRouteRouteChildren = {
+  AppLayoutIndexRoute: AppLayoutIndexRoute,
+  AppLayoutMoviesIndexRoute: AppLayoutMoviesIndexRoute,
+}
+
+const AppLayoutRouteRouteWithChildren = AppLayoutRouteRoute._addFileChildren(
+  AppLayoutRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppLayoutRouteRoute: AppLayoutRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
