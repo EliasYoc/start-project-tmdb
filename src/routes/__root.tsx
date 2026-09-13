@@ -1,3 +1,4 @@
+import { createTheme, MantineProvider } from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -6,10 +7,10 @@ import {
 	Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-
 import { getLocale } from "#/paraglide/runtime";
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools";
 import appCss from "../styles.css?url";
+import "@mantine/core/styles.css";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -48,6 +49,26 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 	notFoundComponent: () => <p>Lleguele, aqui no hay nada</p>,
 });
 
+const theme = createTheme({
+	/** Put your mantine theme override here */
+	primaryColor: "tmdb",
+	colors: {
+		tmdb: [
+			"#f2fbf9",
+			"#d2f5f0",
+			"#a5eae1",
+			"#71d9cf",
+			"#42bfb7",
+			"#28a49e",
+			"#1e8380",
+			"#1c6968",
+			"#1b5454",
+			"#1a4747",
+			"#09292a",
+		],
+	},
+});
+
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang={getLocale()}>
@@ -55,7 +76,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body>
-				{children}
+				<MantineProvider defaultColorScheme="light" theme={theme}>
+					{children}
+				</MantineProvider>
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",
