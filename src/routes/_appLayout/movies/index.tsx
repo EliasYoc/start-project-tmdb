@@ -4,5 +4,9 @@ export const Route = createFileRoute("/_appLayout/movies/")({
 	component: Movies,
 });
 function Movies() {
-	return <div>Movies</div>;
+	return (
+		<main>
+			<h1>Movies</h1>
+		</main>
+	);
 }
