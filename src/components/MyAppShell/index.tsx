@@ -25,7 +25,14 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 				</AppShell.Section>
 			</AppShell.Navbar>
 
-			<AppShell.Main>{children}</AppShell.Main>
+			<AppShell.Main>
+				{children}
+				{/* On desktop the attribution lives at the foot of the sidebar; phones
+				    have no sidebar, so every page carries it here instead. */}
+				<footer className="px-4 pb-6 sm:hidden">
+					<TmdbAttribution />
+				</footer>
+			</AppShell.Main>
 
 			<AppShell.Footer
 				hiddenFrom="sm"

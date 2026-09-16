@@ -1,4 +1,4 @@
-import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -91,9 +91,12 @@ const theme = createTheme({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang={getLocale()}>
+		// The scheme is written straight onto the markup rather than injected by
+		// `ColorSchemeScript`: the script runs before hydration, so React would
+		// find an attribute on <html> that its own SSR output does not have and
+		// report a hydration mismatch. Forced dark needs no script anyway.
+		<html lang={getLocale()} data-mantine-color-scheme="dark">
 			<head>
-				<ColorSchemeScript forceColorScheme="dark" />
 				<HeadContent />
 			</head>
 			<body>

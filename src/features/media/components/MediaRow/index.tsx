@@ -32,12 +32,15 @@ export function MediaRow({
 		});
 	};
 
+	// Nothing to scroll past an error or an empty list, so the arrows go away.
+	const isScrollable = !isError && (isPending || items.length > 0);
+
 	return (
 		<section className="py-4">
 			<header className="mb-4 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 				<h2 className="text-xl font-bold text-white sm:text-2xl">{title}</h2>
 
-				<div className="hidden gap-2 md:flex">
+				<div className={`gap-2 ${isScrollable ? "hidden md:flex" : "hidden"}`}>
 					<ActionIcon
 						variant="subtle"
 						color="gray"
@@ -64,6 +67,10 @@ export function MediaRow({
 			{isError ? (
 				<p className="px-4 text-sm text-neutral-400 sm:px-6 lg:px-8">
 					We could not load {title.toLowerCase()} right now.
+				</p>
+			) : !isPending && items.length === 0 ? (
+				<p className="px-4 text-sm text-neutral-400 sm:px-6 lg:px-8">
+					Nothing here at the moment.
 				</p>
 			) : (
 				<div

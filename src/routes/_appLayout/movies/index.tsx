@@ -14,6 +14,14 @@ const moviesSearchSchema = z.object({
 	q: z.string().trim().min(1).max(200).optional().catch(undefined),
 });
 
+/** One source for the loader and the render, so nothing ships as a skeleton. */
+const RAILS = [
+	{ title: "In theatres", query: getInTheatresMoviesQueryOptions() },
+	{ title: "Popular", query: getMediaListQueryOptions("movie/popular") },
+	{ title: "Top rated", query: getMediaListQueryOptions("movie/top_rated") },
+	{ title: "Coming soon", query: getMediaListQueryOptions("movie/upcoming") },
+];
+
 export const Route = createFileRoute("/_appLayout/movies/")({
 	validateSearch: moviesSearchSchema,
 	loaderDeps: ({ search }) => ({ q: search.q }),
@@ -22,9 +30,10 @@ export const Route = createFileRoute("/_appLayout/movies/")({
 
 		await Promise.all([
 			warmQuery(queryClient, getGenresQueryOptions()),
-			deps.q
-				? warmQuery(queryClient, getSearchMoviesQueryOptions(deps.q))
-				: Promise.resolve(),
+			// Only one of the two views renders, so only its data is fetched.
+			...(deps.q
+				? [warmQuery(queryClient, getSearchMoviesQueryOptions(deps.q))]
+				: RAILS.map((rail) => warmQuery(queryClient, rail.query))),
 		]);
 	},
 	component: Movies,
@@ -42,22 +51,9 @@ function Movies() {
 					<h1 className="px-4 text-2xl font-bold text-white sm:px-6 lg:px-8">
 						Movies
 					</h1>
-					<MediaRow
-						title="In theatres"
-						query={getInTheatresMoviesQueryOptions()}
-					/>
-					<MediaRow
-						title="Popular"
-						query={getMediaListQueryOptions("movie/popular")}
-					/>
-					<MediaRow
-						title="Top rated"
-						query={getMediaListQueryOptions("movie/top_rated")}
-					/>
-					<MediaRow
-						title="Coming soon"
-						query={getMediaListQueryOptions("movie/upcoming")}
-					/>
+					{RAILS.map((rail) => (
+						<MediaRow key={rail.title} title={rail.title} query={rail.query} />
+					))}
 				</>
 			)}
 		</main>

@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
-import { TmdbAttribution } from "#/components/MyAppShell";
 import { CategoryTabs } from "#/features/home/components/CategoryTabs";
 import { HeroCarousel } from "#/features/home/components/HeroCarousel";
 import { homeRailsFor } from "#/features/home/utils/home-rails";
@@ -51,15 +50,13 @@ function Home() {
 
 			<CategoryTabs active={category} />
 
-			<HeroCarousel category={category} />
+			{/* Keyed so switching tabs starts the new set at its first slide
+			    instead of inheriting the previous scroll position. */}
+			<HeroCarousel key={category} category={category} />
 
 			{homeRailsFor(category).map((rail) => (
 				<MediaRow key={rail.title} title={rail.title} query={rail.query} />
 			))}
-
-			<footer className="mt-4 px-4 sm:px-6 lg:px-8">
-				<TmdbAttribution />
-			</footer>
 		</main>
 	);
 }

@@ -27,6 +27,14 @@ import { backdropUrl, posterUrl } from "#/integrations/tmdb/images";
 const SLIDE_COUNT = 5;
 const AUTOPLAY_MS = 7000;
 
+/**
+ * A CSS `scroll-behavior` override does not reach `scrollTo({behavior:"smooth"})`,
+ * so the preference has to be read here as well.
+ */
+function prefersReducedMotion() {
+	return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 /** Portrait crop on phones, cinematic on wide screens. */
 const FRAME =
 	"relative aspect-4/5 w-full shrink-0 snap-center overflow-hidden sm:aspect-video xl:aspect-[2.4/1]";
@@ -48,13 +56,12 @@ export function HeroCarousel({ category }: { category: TrendingCategory }) {
 		if (!scroller) return;
 		scroller.scrollTo({
 			left: index * scroller.clientWidth,
-			behavior: "smooth",
+			behavior: prefersReducedMotion() ? "auto" : "smooth",
 		});
 	};
 
 	useEffect(() => {
-		if (slides.length < 2 || isPaused) return;
-		if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+		if (slides.length < 2 || isPaused || prefersReducedMotion()) return;
 
 		const timer = window.setInterval(() => {
 			const scroller = scrollerRef.current;
@@ -78,8 +85,17 @@ export function HeroCarousel({ category }: { category: TrendingCategory }) {
 		);
 	}
 
-	if (isPending || slides.length === 0) {
-		return <Skeleton className={FRAME} radius={0} animate={isPending} />;
+	if (isPending) {
+		return <Skeleton className={FRAME} radius={0} />;
+	}
+
+	// `trending.all` can come back with nothing watchable once people are dropped.
+	if (slides.length === 0) {
+		return (
+			<div className="px-4 py-10 text-center text-sm text-neutral-400 sm:px-6">
+				Nothing is trending in this category right now.
+			</div>
+		);
 	}
 
 	return (
@@ -87,8 +103,15 @@ export function HeroCarousel({ category }: { category: TrendingCategory }) {
 			aria-roledescription="carousel"
 			aria-label="Trending now"
 			className="relative"
-			onPointerEnter={() => setPaused(true)}
-			onPointerLeave={() => setPaused(false)}
+			// Mouse only: on touch, `pointerenter` fires on the swipe itself and
+			// `pointerleave` is not guaranteed to follow, which would leave
+			// autoplay stuck off for the rest of the visit.
+			onPointerEnter={(event) =>
+				event.pointerType === "mouse" && setPaused(true)
+			}
+			onPointerLeave={(event) =>
+				event.pointerType === "mouse" && setPaused(false)
+			}
 			onFocusCapture={() => setPaused(true)}
 			onBlurCapture={() => setPaused(false)}
 		>
@@ -225,7 +248,9 @@ function HeroSlide({
 			{/* Keeps the copy legible over whatever artwork TMDB returns. */}
 			<div className="absolute inset-0 bg-linear-to-t from-surface-1 via-surface-1/55 to-surface-1/10" />
 
-			<div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-4 sm:p-6 lg:max-w-2xl lg:p-10">
+			{/* From `md` the left padding clears the lane the prev arrow sits in,
+			    otherwise the arrow lands on top of the title block. */}
+			<div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-4 sm:p-6 md:pl-20 lg:max-w-3xl lg:py-10 lg:pr-10">
 				<p className="flex items-center gap-1.5 text-sm font-medium text-neutral-200">
 					Trending
 					<FlameIcon size={15} className="text-orange-400" />
