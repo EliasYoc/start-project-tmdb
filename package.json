@@ -31,6 +31,7 @@
     "@tanstack/react-start": "latest",
     "@tanstack/react-virtual": "^3.14.10",
     "es-toolkit": "^1.52.0",
+    "lucide-react": "^1.46.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.18",
