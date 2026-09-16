@@ -1,14 +1,5 @@
-import { queryOptions } from "@tanstack/react-query";
-import { createServerFn } from "@tanstack/react-start";
-import { tmdb } from "#/integrations/tmdb/tmdb.server";
+import { getMediaListQueryOptions } from "#/features/media/utils/media-lists";
 
-const fetchInTheatresMovies = createServerFn().handler(async () => {
-	const res = tmdb.movie_lists.now_playing();
-	return res;
-});
-
+/** Movies currently in theatres (TMDB `movie/now_playing`). */
 export const getInTheatresMoviesQueryOptions = () =>
-	queryOptions({
-		queryKey: ["in-theatres-movies"],
-		queryFn: fetchInTheatresMovies,
-	});
+	getMediaListQueryOptions("movie/now_playing");

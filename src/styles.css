@@ -1,6 +1,24 @@
 
 @import "tailwindcss";
 
+@theme {
+  --color-brand-50: #f6f0ff;
+  --color-brand-100: #e9dcff;
+  --color-brand-200: #d0b6ff;
+  --color-brand-300: #b68eff;
+  --color-brand-400: #a06bff;
+  --color-brand-500: #8b4bff;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6a2dd1;
+  --color-brand-800: #5623ab;
+  --color-brand-900: #3f1a7d;
+
+  --color-surface-0: #08080b;
+  --color-surface-1: #0f0f14;
+  --color-surface-2: #16161d;
+  --color-surface-3: #1f1f29;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -11,7 +29,35 @@ body,
   min-height: 100%;
 }
 
-body {
-  margin: 0;
+html {
+  /* Keeps the overscroll area dark instead of flashing white. */
+  background-color: var(--color-surface-1);
+  color-scheme: dark;
 }
 
+body {
+  margin: 0;
+  background-color: var(--color-surface-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Horizontal rails scroll by drag/wheel; the bar itself is noise at this size. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

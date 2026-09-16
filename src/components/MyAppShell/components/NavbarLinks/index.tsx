@@ -1,51 +1,24 @@
-import { AppShell, NavLink } from "@mantine/core";
-import { Link, linkOptions } from "@tanstack/react-router";
-
-const options = linkOptions([
-	{
-		to: "/",
-		label: "Home",
-		activeOptions: { exact: true },
-	},
-	{
-		to: "/movies",
-		label: "Movies",
-	},
-	{
-		to: "/tv-shows",
-		label: "TV Shows",
-	},
-]);
+import { AppShell } from "@mantine/core";
+import { Link } from "@tanstack/react-router";
+import { navMeta, navOptions } from "../navigation";
 
 export function NavbarLinks() {
-	const links = options.map((item) => (
-		<NavLink component={Link} key={item.to} label={item.label} to={item.to} />
-	));
-
 	return (
-		<>
-			<AppShell.Section p="md">TMDB</AppShell.Section>
-			<AppShell.Section p="md">{links}</AppShell.Section>
+		<AppShell.Section grow component="nav" aria-label="Main" p="sm">
+			{navOptions.map((item) => {
+				const { label, Icon } = navMeta[item.to];
 
-			{/* <div className={classes.footer}>
-				<a
-					href="#"
-					className={classes.link}
-					onClick={(event) => event.preventDefault()}
-				>
-					<IconSwitchHorizontal className={classes.linkIcon} stroke={1.5} />
-					<span>Change account</span>
-				</a>
-
-				<a
-					href="#"
-					className={classes.link}
-					onClick={(event) => event.preventDefault()}
-				>
-					<IconLogout className={classes.linkIcon} stroke={1.5} />
-					<span>Logout</span>
-				</a>
-			</div> */}
-		</>
+				return (
+					<Link
+						key={item.to}
+						{...item}
+						className="mb-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-neutral-400 no-underline transition hover:bg-surface-2 hover:text-white data-[status=active]:bg-brand-600 data-[status=active]:text-white"
+					>
+						<Icon size={18} />
+						{label}
+					</Link>
+				);
+			})}
+		</AppShell.Section>
 	);
 }

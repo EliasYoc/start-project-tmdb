@@ -1,49 +1,58 @@
-import { AppShell, Burger, Group } from "@mantine/core";
-import { useState } from "react";
+import { AppShell } from "@mantine/core";
+import { AppHeader } from "./components/AppHeader";
+import { BottomNav } from "./components/BottomNav";
 import { NavbarLinks } from "./components/NavbarLinks";
 
 const MyAppShell = ({ children }: { children: React.ReactNode }) => {
-	const [isOpened, setOpened] = useState(false);
-
-	const toggle = () => setOpened((o) => !o);
 	return (
 		<AppShell
-			layout="alt"
-			header={{ height: 60 }}
-			// footer={{ height: 60 }}
-			navbar={{
-				width: 300,
-				breakpoint: "sm",
-				collapsed: { mobile: !isOpened },
-			}}
-			// aside={{
-			// 	width: 300,
-			// 	breakpoint: "md",
-			// 	collapsed: { desktop: false, mobile: true },
-			// }}
-			padding="md"
+			header={{ height: { base: 72, sm: 76 } }}
+			// The sidebar is the desktop navigation; phones get the bottom bar instead,
+			// so there is no burger and nothing to toggle.
+			navbar={{ width: 240, breakpoint: "sm", collapsed: { mobile: true } }}
+			footer={{ height: { base: 72, sm: 0 } }}
+			padding={0}
+			withBorder={false}
 		>
-			<AppShell.Navbar>
-				<Burger opened={isOpened} onClick={toggle} hiddenFrom="sm" size="sm" />
-
-				<NavbarLinks />
-			</AppShell.Navbar>
-			<AppShell.Header>
-				<Group h="100%" px="md">
-					<Burger
-						opened={isOpened}
-						onClick={toggle}
-						hiddenFrom="sm"
-						size="sm"
-					/>
-					Header
-				</Group>
+			<AppShell.Header className="border-b border-white/5 bg-surface-1">
+				<AppHeader />
 			</AppShell.Header>
+
+			<AppShell.Navbar className="border-r border-white/5 bg-surface-1">
+				<NavbarLinks />
+				<AppShell.Section p="sm">
+					<TmdbAttribution />
+				</AppShell.Section>
+			</AppShell.Navbar>
+
 			<AppShell.Main>{children}</AppShell.Main>
-			{/* <AppShell.Aside p="md">Aside</AppShell.Aside> */}
-			{/* <AppShell.Footer p="md">Footer</AppShell.Footer> */}
+
+			<AppShell.Footer
+				hiddenFrom="sm"
+				className="border-t border-white/5 bg-surface-1"
+			>
+				<BottomNav />
+			</AppShell.Footer>
 		</AppShell>
 	);
 };
+
+/** Required by the TMDB API terms of use. */
+export function TmdbAttribution() {
+	return (
+		<p className="text-[11px] leading-relaxed text-neutral-500">
+			This product uses the{" "}
+			<a
+				href="https://www.themoviedb.org/"
+				target="_blank"
+				rel="noreferrer"
+				className="text-neutral-400 underline underline-offset-2 hover:text-neutral-300"
+			>
+				TMDB
+			</a>{" "}
+			API but is not endorsed or certified by TMDB.
+		</p>
+	);
+}
 
 export default MyAppShell;

@@ -1,4 +1,4 @@
-import { createTheme, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, createTheme, MantineProvider } from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -35,7 +35,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "TanStack Start Starter",
+				name: "theme-color",
+				content: "#0f0f14",
+			},
+			{
+				title: "CineRadar — find what to watch tonight",
 			},
 		],
 		links: [
@@ -50,21 +54,37 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 const theme = createTheme({
-	/** Put your mantine theme override here */
-	primaryColor: "tmdb",
+	primaryColor: "brand",
+	primaryShade: 6,
+	defaultRadius: "md",
+	fontFamily:
+		"Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+	headings: { fontWeight: "700" },
 	colors: {
-		tmdb: [
-			"#f2fbf9",
-			"#d2f5f0",
-			"#a5eae1",
-			"#71d9cf",
-			"#42bfb7",
-			"#28a49e",
-			"#1e8380",
-			"#1c6968",
-			"#1b5454",
-			"#1a4747",
-			"#09292a",
+		brand: [
+			"#f6f0ff",
+			"#e9dcff",
+			"#d0b6ff",
+			"#b68eff",
+			"#a06bff",
+			"#8b4bff",
+			"#7c3aed",
+			"#6a2dd1",
+			"#5623ab",
+			"#3f1a7d",
+		],
+		// Near-black surfaces so cards and the app background read as one dark sheet.
+		dark: [
+			"#e6e6ee",
+			"#c7c7d4",
+			"#9d9dae",
+			"#76768a",
+			"#4a4a5c",
+			"#2b2b36",
+			"#1f1f29",
+			"#0f0f14",
+			"#0b0b0f",
+			"#08080b",
 		],
 	},
 });
@@ -73,10 +93,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang={getLocale()}>
 			<head>
+				<ColorSchemeScript forceColorScheme="dark" />
 				<HeadContent />
 			</head>
 			<body>
-				<MantineProvider defaultColorScheme="light" theme={theme}>
+				<MantineProvider forceColorScheme="dark" theme={theme}>
 					{children}
 				</MantineProvider>
 				<TanStackDevtools
