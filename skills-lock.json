@@ -7,12 +7,6 @@
       "skillPath": "skills/agent-browser/SKILL.md",
       "computedHash": "a674b7d81066e3cc471a7512ddb4ae724418cbfefa75cbb050b0dc430e4d57a0"
     },
-    "changelog-generator": {
-      "source": "composiohq/awesome-claude-skills",
-      "sourceType": "github",
-      "skillPath": "changelog-generator/SKILL.md",
-      "computedHash": "f84bcb773a67ade28878d63103e3d4dc1f5031d6103be5107ff99c15b8d4a992"
-    },
     "typescript-advanced-types": {
       "source": "wshobson/agents",
       "sourceType": "github",
