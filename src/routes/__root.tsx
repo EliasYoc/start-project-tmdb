@@ -51,7 +51,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 const theme = createTheme({
 	/** Put your mantine theme override here */
-	primaryColor: "tmdb",
+	primaryColor: "brand",
 	colors: {
 		tmdb: [
 			"#f2fbf9",
@@ -65,6 +65,31 @@ const theme = createTheme({
 			"#1b5454",
 			"#1a4747",
 			"#09292a",
+		],
+		brand: [
+			"#f6f0ff",
+			"#e9dcff",
+			"#d0b6ff",
+			"#b68eff",
+			"#a06bff",
+			"#8b4bff",
+			"#7c3aed",
+			"#6a2dd1",
+			"#5623ab",
+			"#3f1a7d",
+		],
+		// Near-black surfaces so cards and the app background read as one dark sheet.
+		dark: [
+			"#e6e6ee",
+			"#c7c7d4",
+			"#9d9dae",
+			"#76768a",
+			"#4a4a5c",
+			"#2b2b36",
+			"#1f1f29",
+			"#0f0f14",
+			"#0b0b0f",
+			"#08080b",
 		],
 	},
 });
