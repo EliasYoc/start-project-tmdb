@@ -1,4 +1,9 @@
-import { createTheme, MantineProvider } from "@mantine/core";
+import {
+	ColorSchemeScript,
+	createTheme,
+	MantineProvider,
+	mantineHtmlProps,
+} from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -96,12 +101,13 @@ const theme = createTheme({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang={getLocale()}>
+		<html lang={getLocale()} {...mantineHtmlProps}>
 			<head>
 				<HeadContent />
+				<ColorSchemeScript defaultColorScheme="dark" />
 			</head>
 			<body>
-				<MantineProvider defaultColorScheme="light" theme={theme}>
+				<MantineProvider defaultColorScheme="dark" theme={theme}>
 					{children}
 				</MantineProvider>
 				<TanStackDevtools
