@@ -29,7 +29,7 @@ export function MediaCard({
 
 	return (
 		<article className={`${CARD_WIDTH} shrink-0 snap-start`}>
-			<div className="relative aspect-video overflow-hidden rounded-xl bg-surface-3">
+			<div className="relative aspect-video overflow-hidden rounded-xl bg-(--mantine-color-dark-6)">
 				{image ? (
 					<img
 						src={image}
@@ -39,7 +39,7 @@ export function MediaCard({
 						className="size-full object-cover"
 					/>
 				) : (
-					<div className="flex size-full items-center justify-center bg-linear-to-br from-surface-3 to-brand-900 px-4 text-center text-sm font-semibold text-neutral-300">
+					<div className="flex size-full items-center justify-center bg-linear-to-br from-(--mantine-color-dark-6) to-(--mantine-color-brand-9) px-4 text-center text-sm font-semibold text-neutral-300">
 						{item.title}
 					</div>
 				)}
@@ -49,7 +49,7 @@ export function MediaCard({
 					target="_blank"
 					rel="noreferrer"
 					aria-label={`Open ${item.title} on TMDB`}
-					className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full bg-black/55 text-white ring-2 ring-brand-500 backdrop-blur-sm transition hover:scale-105 hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
+					className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full bg-black/55 text-white ring-2 ring-(--mantine-color-brand-5) backdrop-blur-sm transition hover:scale-105 hover:bg-(--mantine-color-brand-6) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--mantine-color-brand-4)"
 				>
 					<IconPlayerPlay size={18} fill="currentColor" strokeWidth={0} />
 				</a>
@@ -60,7 +60,7 @@ export function MediaCard({
 			</h3>
 
 			<div className="mt-1.5 flex items-center gap-2 text-[13px] text-neutral-400">
-				<span className="inline-flex items-center gap-1 rounded bg-surface-3 px-1.5 py-0.5 font-semibold text-white">
+				<span className="inline-flex items-center gap-1 rounded bg-(--mantine-color-dark-6) px-1.5 py-0.5 font-semibold text-white">
 					<IconStar size={12} className="text-yellow-400" fill="currentColor" />
 					{formatRating(item.voteAverage)}
 				</span>

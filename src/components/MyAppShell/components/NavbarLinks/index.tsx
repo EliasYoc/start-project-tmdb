@@ -4,7 +4,13 @@ import { navLinks } from "../../nav-links";
 
 export function NavbarLinks() {
 	const links = navLinks.map((item) => (
-		<NavLink component={Link} key={item.to} label={item.label} to={item.to} />
+		<NavLink
+			component={Link}
+			variant="filled"
+			key={item.to}
+			label={item.label}
+			to={item.to}
+		/>
 	));
 
 	return (
