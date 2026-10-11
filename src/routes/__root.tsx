@@ -3,6 +3,7 @@ import {
 	createTheme,
 	MantineProvider,
 	mantineHtmlProps,
+	NavLink,
 } from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
@@ -57,6 +58,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 const theme = createTheme({
 	/** Put your mantine theme override here */
 	primaryColor: "brand",
+	primaryShade: 7,
+	defaultRadius: "md",
+	components: {
+		NavLink: NavLink.extend({
+			styles: { root: { borderRadius: "var(--mantine-radius-default)" } },
+		}),
+	},
 	colors: {
 		tmdb: [
 			"#f2fbf9",
@@ -83,7 +91,7 @@ const theme = createTheme({
 			"#5623ab",
 			"#3f1a7d",
 		],
-		// Near-black surfaces so cards and the app background read as one dark sheet.
+		// la key dark pertenece a la paleta de colores de mantine, asi que con estos ya le estas cambiando el color a toda la app en modo dark
 		dark: [
 			"#e6e6ee",
 			"#c7c7d4",

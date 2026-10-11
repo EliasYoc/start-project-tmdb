@@ -5,8 +5,8 @@ import { navLinks } from "../../nav-links";
 export function NavbarLinks() {
 	const links = navLinks.map((item) => (
 		<NavLink
-			component={Link}
 			variant="filled"
+			component={Link}
 			key={item.to}
 			label={item.label}
 			to={item.to}
