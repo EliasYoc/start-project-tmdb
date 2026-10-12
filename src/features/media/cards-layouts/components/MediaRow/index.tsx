@@ -21,7 +21,7 @@ export function MediaRow({
 }) {
 	const { data: items, isPending, isError } = useQuery(query);
 	const { data: genres } = useQuery(getGenresQueryOptions());
-	const scrollerRef = useRef<HTMLDivElement>(null);
+	const scrollerRef = useRef<HTMLUListElement>(null);
 
 	const scrollBy = (direction: 1 | -1) => {
 		const scroller = scrollerRef.current;
@@ -73,8 +73,11 @@ export function MediaRow({
 					Nothing here at the moment.
 				</p>
 			) : (
-				<div
+				// Tailwind's preflight sets list-style: none, which makes Safari/VoiceOver
+				// drop the implicit list role, so it is restated explicitly.
+				<ul
 					ref={scrollerRef}
+					aria-busy={isPending}
 					className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-8 lg:px-8"
 				>
 					{isPending
@@ -89,7 +92,7 @@ export function MediaRow({
 									genres={genres}
 								/>
 							))}
-				</div>
+				</ul>
 			)}
 		</section>
 	);
