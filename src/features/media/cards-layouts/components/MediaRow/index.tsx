@@ -78,7 +78,7 @@ export function MediaRow({
 				<ul
 					ref={scrollerRef}
 					aria-busy={isPending}
-					className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-8 lg:px-8"
+					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-8 lg:px-8"
 				>
 					{isPending
 						? Array.from({ length: SKELETON_COUNT }, (_, index) => (
