@@ -42,7 +42,6 @@ function Home() {
 			<WindowVirtualizer
 				renderVirtualItem={(item, virtualizer) => (
 					<MediaRow
-						// key={item.key}
 						style={{
 							position: "absolute",
 							top: 0,

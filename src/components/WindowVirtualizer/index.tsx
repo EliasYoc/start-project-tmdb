@@ -3,7 +3,7 @@ import {
 	useWindowVirtualizer,
 	type VirtualItem,
 } from "@tanstack/react-virtual";
-import { type ReactNode, useRef } from "react";
+import { Fragment, type ReactNode, useRef } from "react";
 
 /** Same options `useWindowVirtualizer` accepts, so they stay in sync with the library. */
 type WindowVirtualizerOptions<TItemElement extends Element> = Parameters<
@@ -36,9 +36,11 @@ export default function WindowVirtualizer<
 			}}
 		>
 			{/* {renderItems(virtualizer)} */}
-			{virtualizer
-				.getVirtualItems()
-				.map((virtualItem) => renderVirtualItem(virtualItem, virtualizer))}
+			{virtualizer.getVirtualItems().map((virtualItem) => (
+				<Fragment key={virtualItem.key}>
+					{renderVirtualItem(virtualItem, virtualizer)}
+				</Fragment>
+			))}
 		</div>
 	);
 }
