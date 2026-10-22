@@ -1,12 +1,21 @@
 import { ActionIcon } from "@mantine/core";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
+import { type ComponentProps, useRef } from "react";
 import { getGenresQueryOptions } from "../../utils/genres";
 import type { MediaListQueryOptions } from "../../utils/media-list";
 import { MediaCard, MediaCardSkeleton } from "../MediaCard";
 
 const SKELETON_COUNT = 6;
+
+/**
+ * The row renders its own content, and `title` is the heading text rather than
+ * the HTML tooltip attribute, so both are taken out of the section's props.
+ */
+type MediaRowProps = Omit<ComponentProps<"section">, "title" | "children"> & {
+	title: string;
+	query: MediaListQueryOptions;
+};
 
 /**
  * A horizontally scrollable rail of media cards. Swipe on touch, arrow buttons
@@ -15,10 +24,9 @@ const SKELETON_COUNT = 6;
 export function MediaRow({
 	title,
 	query,
-}: {
-	title: string;
-	query: MediaListQueryOptions;
-}) {
+	className,
+	...sectionProps
+}: MediaRowProps) {
 	const { data: items, isPending, isError } = useQuery(query);
 	const { data: genres } = useQuery(getGenresQueryOptions());
 	const scrollerRef = useRef<HTMLUListElement>(null);
@@ -36,7 +44,10 @@ export function MediaRow({
 	const isScrollable = !isError && (isPending || items.length > 0);
 
 	return (
-		<section className="py-4">
+		<section
+			{...sectionProps}
+			className={className ? `py-4 ${className}` : "py-4"}
+		>
 			<header className="mb-4 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
 				<h2 className="text-xl font-bold text-white sm:text-2xl">{title}</h2>
 
