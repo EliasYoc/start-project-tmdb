@@ -41,7 +41,7 @@ function Home() {
 		<>
 			<WindowVirtualizer
 				renderVirtualItem={(item, virtualizer) => (
-					<div
+					<MediaRow
 						// key={item.key}
 						style={{
 							position: "absolute",
@@ -53,12 +53,9 @@ function Home() {
 								item.start - virtualizer.options.scrollMargin
 							}px)`,
 						}}
-					>
-						<MediaRow
-							title={list[item.index].title}
-							query={list[item.index].query}
-						/>
-					</div>
+						title={list[item.index].title}
+						query={list[item.index].query}
+					/>
 				)}
 				getOptions={(element) => ({
 					count: list.length,
