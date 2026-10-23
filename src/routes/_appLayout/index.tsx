@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import WindowVirtualizer from "#/components/WindowVirtualizer";
+import WindowVirtualList from "#/components/WindowVirtualList";
 import { MediaRow } from "#/features/media/cards-layouts/components/MediaRow";
 import { getMediaListQueryOptions } from "#/features/media/cards-layouts/utils/media-list";
 // import { getInTheatresMoviesQueryOptions } from "#/features/movies/movie-list/utils/in-theatres-movies";
@@ -39,7 +39,7 @@ const list = [
 function Home() {
 	return (
 		<>
-			<WindowVirtualizer
+			<WindowVirtualList
 				renderVirtualItem={(item, virtualizer) => (
 					<MediaRow
 						style={{

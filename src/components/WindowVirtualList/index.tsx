@@ -10,7 +10,7 @@ type WindowVirtualizerOptions<TItemElement extends Element> = Parameters<
 	typeof useWindowVirtualizer<TItemElement>
 >[0];
 
-type WindowVirtualizerProps<TItemElement extends Element> = {
+type WindowVirtualListProps<TItemElement extends Element> = {
 	/** Receives the list container; it is `null` until the first render commits. */
 	getOptions: (
 		listElement: HTMLDivElement | null,
@@ -21,15 +21,15 @@ type WindowVirtualizerProps<TItemElement extends Element> = {
 	) => ReactNode;
 };
 
-export default function WindowVirtualizer<
+export default function WindowVirtualList<
 	TItemElement extends Element = HTMLDivElement,
->({ renderVirtualItem, getOptions }: WindowVirtualizerProps<TItemElement>) {
-	const refList = useRef<HTMLDivElement>(null);
-	const virtualizer = useWindowVirtualizer(getOptions(refList.current));
+>({ renderVirtualItem, getOptions }: WindowVirtualListProps<TItemElement>) {
+	const listRef = useRef<HTMLDivElement>(null);
+	const virtualizer = useWindowVirtualizer(getOptions(listRef.current));
 
 	return (
 		<div
-			ref={refList}
+			ref={listRef}
 			className="list relative w-full"
 			style={{
 				height: `${virtualizer.getTotalSize()}px`,
