@@ -15,39 +15,53 @@ type WindowVirtualListProps<TItemElement extends Element> = {
 	 * Options for `useWindowVirtualizer`, read on every render.
 	 * See https://tanstack.com/virtual/latest/docs/api/virtualizer
 	 *
-	 * `listElement` is the list container, for options that depend on where the
-	 * list sits in the page, such as `scrollMargin`. It is `null` on the first
-	 * render, before the container exists.
+	 * @param listElement The `div` this component renders around the items, to
+	 * use in the options (e.g. `scrollMargin`). `null` on the first render.
+	 *
+	 * @example
+	 * getOptions={(listElement) => ({
+	 * 	count: rows.length,
+	 * 	estimateSize: () => 306,
+	 * 	overscan: 1,
+	 * 	gap: 8,
+	 * 	scrollMargin: listElement?.offsetTop ?? 0,
+	 * })}
 	 */
 	getOptions: (
 		listElement: HTMLDivElement | null,
 	) => WindowVirtualizerOptions<TItemElement>;
 	/**
 	 * Renders one item. It is only called for the items near the viewport (plus
-	 * `overscan`), not for all `count` items, and it doesn't need a `key`.
+	 * `overscan`), not for all `count` items.
 	 *
-	 * The list doesn't position anything: it is a `position: relative` container
-	 * as tall as all the items together, so the returned element must place
-	 * itself with these styles or the items pile up at the top:
-	 * - `position: absolute`, `top: 0`, `left: 0`, `width: 100%`
-	 * - `transform: translateY(${virtualItem.start - virtualizer.options.scrollMargin}px)`.
-	 *   `start` counts from the top of the page, so the margin is subtracted to
-	 *   make it relative to the list.
+	 * The returned element must place
+	 * itself with these styles or the items pile up at the start:
+	 * - Always: `position: absolute`, `top: 0`, `left: 0`.
+	 * - Vertical (default): `width: 100%` and
+	 *   `transform: translateY(${virtualItem.start - virtualizer.options.scrollMargin}px)`.
+	 * - Horizontal (`horizontal: true`): `height: 100%` and
+	 *   `transform: translateX(${virtualItem.start - virtualizer.options.scrollMargin}px)`.
 	 *
-	 * For its height, pick one:
-	 * - `height: ${virtualItem.size}px`, when every item is exactly as tall as
-	 *   `estimateSize` says.
-	 * - Leave the height to the content and pass `ref={virtualizer.measureElement}`
-	 *   and `data-index={virtualItem.index}`, when it varies (text wrapping,
+	 * `start` counts from the start of the page (its top, or its left edge when
+	 * horizontal), so the margin is subtracted to make it relative to the list.
+	 *
+	 * For its length along the scroll axis (height when vertical, width when
+	 * horizontal), pick one:
+	 * - `height` or `width` set to `${virtualItem.size}px`, when every item is
+	 *   exactly as long as `estimateSize` says.
+	 * - Leave it to the content and pass `ref={virtualizer.measureElement}` and
+	 *   `data-index={virtualItem.index}`, when it varies (text wrapping,
 	 *   breakpoints). The virtualizer measures each item and corrects the positions.
 	 *
 	 * @param virtualItem Where this item goes. `index` is its position in your
-	 * data (use it to look the item up), `start` its offset from the top of the
-	 * page and `size` its estimated or measured height, both in px.
+	 * data (use it to look the item up), `start` its offset from the start of the
+	 * page and `size` its estimated or measured length along the scroll axis,
+	 * both in px.
 	 * @param virtualizer The virtualizer instance, for `options.scrollMargin`,
 	 * `measureElement` and methods like `scrollToIndex`.
 	 *
 	 * @example
+	 * // Vertical, every item as tall as `estimateSize`
 	 * renderVirtualItem={(virtualItem, virtualizer) => (
 	 * 	<MediaRow
 	 * 		style={{
@@ -61,6 +75,24 @@ type WindowVirtualListProps<TItemElement extends Element> = {
 	 * 		{...rows[virtualItem.index]}
 	 * 	/>
 	 * )}
+	 *
+	 * @example
+	 * // Horizontal (`getOptions` returns `horizontal: true`), widths measured
+	 * renderVirtualItem={(virtualItem, virtualizer) => (
+	 * 	<div
+	 * 		ref={virtualizer.measureElement}
+	 * 		data-index={virtualItem.index}
+	 * 		style={{
+	 * 			position: "absolute",
+	 * 			top: 0,
+	 * 			left: 0,
+	 * 			height: "100%",
+	 * 			transform: `translateX(${virtualItem.start - virtualizer.options.scrollMargin}px)`,
+	 * 		}}
+	 * 	>
+	 * 		{movies[virtualItem.index].title}
+	 * 	</div>
+	 * )}
 	 */
 	renderVirtualItem: (
 		virtualItem: VirtualItem,
@@ -69,29 +101,37 @@ type WindowVirtualListProps<TItemElement extends Element> = {
 };
 
 /**
- * A vertical list that scrolls with the page and only mounts the items near the
- * viewport, built on `useWindowVirtualizer`. Laying out each item is left to
- * `renderVirtualItem`, so every list decides how its items are positioned and sized.
+ * A virtualized list: it only renders the items you can see on screen (plus
+ * `overscan`), not all of them, and it scrolls with the page.
  *
- * Items that aren't mounted can't be found by screen readers or Ctrl+F, so it
- * pays off on long lists rather than short ones.
+ * - It is vertical by default. For a horizontal one, return `horizontal: true`
+ *   from `getOptions`.
  *
- * `TItemElement` is the element your items render (`HTMLDivElement` by
- * default); it types `virtualizer.measureElement`.
+ * A horizontal list scrolls the whole page sideways, not a container inside it:
+ * - No ancestor can have `overflow: hidden` or `overflow: auto`.
+ * - Its parent needs a height, because the list takes the parent's height.
+ *
+ * Items that aren't rendered can't be found by screen readers or Ctrl+F, so use
+ * it for long lists, not short ones.
  */
 export default function WindowVirtualList<
 	TItemElement extends Element = HTMLDivElement,
 >({ renderVirtualItem, getOptions }: WindowVirtualListProps<TItemElement>) {
 	const listRef = useRef<HTMLDivElement>(null);
 	const virtualizer = useWindowVirtualizer(getOptions(listRef.current));
+	const totalSize = `${virtualizer.getTotalSize()}px`;
 
 	return (
 		<div
 			ref={listRef}
-			className="list relative w-full"
-			style={{
-				height: `${virtualizer.getTotalSize()}px`,
-			}}
+			className="list relative"
+			// The items are absolutely positioned, so the list takes its length along
+			// the scroll axis from the virtualizer and fills its parent across it.
+			style={
+				virtualizer.options.horizontal
+					? { width: totalSize, height: "100%" }
+					: { width: "100%", height: totalSize }
+			}
 		>
 			{/* {renderItems(virtualizer)} */}
 			{virtualizer.getVirtualItems().map((virtualItem) => (
