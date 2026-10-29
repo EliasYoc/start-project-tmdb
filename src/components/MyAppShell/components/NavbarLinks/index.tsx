@@ -1,25 +1,16 @@
 import { AppShell, NavLink } from "@mantine/core";
-import { Link, linkOptions } from "@tanstack/react-router";
-
-const options = linkOptions([
-	{
-		to: "/",
-		label: "Home",
-		activeOptions: { exact: true },
-	},
-	{
-		to: "/movies",
-		label: "Movies",
-	},
-	{
-		to: "/tv-shows",
-		label: "TV Shows",
-	},
-]);
+import { Link } from "@tanstack/react-router";
+import { navLinks } from "../../nav-links";
 
 export function NavbarLinks() {
-	const links = options.map((item) => (
-		<NavLink component={Link} key={item.to} label={item.label} to={item.to} />
+	const links = navLinks.map((item) => (
+		<NavLink
+			variant="filled"
+			component={Link}
+			key={item.to}
+			label={item.label}
+			to={item.to}
+		/>
 	));
 
 	return (

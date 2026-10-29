@@ -1,4 +1,10 @@
-import { createTheme, MantineProvider } from "@mantine/core";
+import {
+	ColorSchemeScript,
+	createTheme,
+	MantineProvider,
+	mantineHtmlProps,
+	NavLink,
+} from "@mantine/core";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import type { QueryClient } from "@tanstack/react-query";
 import {
@@ -51,7 +57,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 const theme = createTheme({
 	/** Put your mantine theme override here */
-	primaryColor: "tmdb",
+	primaryColor: "brand",
+	primaryShade: 7,
+	defaultRadius: "md",
+	components: {
+		NavLink: NavLink.extend({
+			styles: { root: { borderRadius: "var(--mantine-radius-default)" } },
+		}),
+	},
 	colors: {
 		tmdb: [
 			"#f2fbf9",
@@ -66,17 +79,43 @@ const theme = createTheme({
 			"#1a4747",
 			"#09292a",
 		],
+		brand: [
+			"#f6f0ff",
+			"#e9dcff",
+			"#d0b6ff",
+			"#b68eff",
+			"#a06bff",
+			"#8b4bff",
+			"#7c3aed",
+			"#6a2dd1",
+			"#5623ab",
+			"#3f1a7d",
+		],
+		// la key dark pertenece a la paleta de colores de mantine, asi que con estos ya le estas cambiando el color a toda la app en modo dark
+		dark: [
+			"#e6e6ee",
+			"#c7c7d4",
+			"#9d9dae",
+			"#76768a",
+			"#4a4a5c",
+			"#2b2b36",
+			"#1f1f29",
+			"#0f0f14",
+			"#0b0b0f",
+			"#08080b",
+		],
 	},
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	return (
-		<html lang={getLocale()}>
+		<html lang={getLocale()} {...mantineHtmlProps}>
 			<head>
 				<HeadContent />
+				<ColorSchemeScript defaultColorScheme="dark" />
 			</head>
 			<body>
-				<MantineProvider defaultColorScheme="light" theme={theme}>
+				<MantineProvider defaultColorScheme="dark" theme={theme}>
 					{children}
 				</MantineProvider>
 				<TanStackDevtools
