@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=24.19.0"
+    "node": "^24.19.0"
   },
   "imports": {
     "#/*": "./src/*"
@@ -30,7 +30,7 @@
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
-    "@tanstack/react-virtual": "^3.14.10",
+    "@tanstack/react-virtual": "^3.14.23",
     "es-toolkit": "^1.52.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -42,7 +42,7 @@
     "@inlang/paraglide-js": "^2.13.1",
     "@rolldown/plugin-babel": "^0.2.3",
     "@tanstack/devtools-vite": "latest",
-    "@tanstack/router-cli": "^1.132.0",
+    "@tanstack/router-cli": "^1.167.46",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
