@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppLayoutRouteRouteImport } from './routes/_appLayout/route'
 import { Route as AppLayoutIndexRouteImport } from './routes/_appLayout/index'
 import { Route as AppLayoutMoviesIndexRouteImport } from './routes/_appLayout/movies/index'
+import { Route as AppLayoutTvShowsIndexRouteImport } from './routes/_appLayout/tv-shows/index'
 
 const AppLayoutRouteRoute = AppLayoutRouteRouteImport.update({
   id: '/_appLayout',
@@ -27,27 +28,40 @@ const AppLayoutMoviesIndexRoute = AppLayoutMoviesIndexRouteImport.update({
   path: '/movies/',
   getParentRoute: () => AppLayoutRouteRoute,
 } as any)
+const AppLayoutTvShowsIndexRoute = AppLayoutTvShowsIndexRouteImport.update({
+  id: '/tv-shows/',
+  path: '/tv-shows/',
+  getParentRoute: () => AppLayoutRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppLayoutIndexRoute
   '/movies/': typeof AppLayoutMoviesIndexRoute
+  '/tv-shows/': typeof AppLayoutTvShowsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppLayoutIndexRoute
   '/movies': typeof AppLayoutMoviesIndexRoute
+  '/tv-shows': typeof AppLayoutTvShowsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_appLayout': typeof AppLayoutRouteRouteWithChildren
   '/_appLayout/': typeof AppLayoutIndexRoute
   '/_appLayout/movies/': typeof AppLayoutMoviesIndexRoute
+  '/_appLayout/tv-shows/': typeof AppLayoutTvShowsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/movies/'
+  fullPaths: '/' | '/movies/' | '/tv-shows/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/movies'
-  id: '__root__' | '/_appLayout' | '/_appLayout/' | '/_appLayout/movies/'
+  to: '/' | '/movies' | '/tv-shows'
+  id:
+    | '__root__'
+    | '/_appLayout'
+    | '/_appLayout/'
+    | '/_appLayout/movies/'
+    | '/_appLayout/tv-shows/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,17 +91,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutMoviesIndexRouteImport
       parentRoute: typeof AppLayoutRouteRoute
     }
+    '/_appLayout/tv-shows/': {
+      id: '/_appLayout/tv-shows/'
+      path: '/tv-shows'
+      fullPath: '/tv-shows/'
+      preLoaderRoute: typeof AppLayoutTvShowsIndexRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
+    }
   }
 }
 
 interface AppLayoutRouteRouteChildren {
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
   AppLayoutMoviesIndexRoute: typeof AppLayoutMoviesIndexRoute
+  AppLayoutTvShowsIndexRoute: typeof AppLayoutTvShowsIndexRoute
 }
 
 const AppLayoutRouteRouteChildren: AppLayoutRouteRouteChildren = {
   AppLayoutIndexRoute: AppLayoutIndexRoute,
   AppLayoutMoviesIndexRoute: AppLayoutMoviesIndexRoute,
+  AppLayoutTvShowsIndexRoute: AppLayoutTvShowsIndexRoute,
 }
 
 const AppLayoutRouteRouteWithChildren = AppLayoutRouteRoute._addFileChildren(

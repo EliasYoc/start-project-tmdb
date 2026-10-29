@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import MyAppShell from "#/components/MyAppShell";
 
 export const Route = createFileRoute("/_appLayout")({
 	component: RouteComponent,
@@ -6,9 +7,8 @@ export const Route = createFileRoute("/_appLayout")({
 
 function RouteComponent() {
 	return (
-		<div>
-			layout
+		<MyAppShell>
 			<Outlet />
-		</div>
+		</MyAppShell>
 	);
 }
