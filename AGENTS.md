@@ -95,3 +95,27 @@ tanstackIntent:
     run: "pnpm dlx @tanstack/intent@latest load @tanstack/virtual-file-routes#virtual-file-routes"
     for: "Programmatic route tree building as an alternative to filesystem conventions: rootRoute, index, route, layout, physical, defineVirtualSubtreeConfig. Use with TanStack Router plugin's virtualRouteConfig option."
 <!-- intent-skills:end -->
+
+# Project structure
+
+```
+src/
+├── components/            # App-wide components (MyAppShell, WindowVirtualList, icons)
+├── features/<feature>/<area>/
+│   ├── components/        # Components of that area, one folder each
+│   └── utils/             # Query options, formatters and constants of that area
+├── integrations/          # Third-party setup (tmdb, tanstack-query); `*.server.ts` is server-only
+├── routes/                # TanStack Router file routes; keep them thin and import from features
+├── paraglide/             # Generated i18n code, do not edit
+└── routeTree.gen.ts       # Generated, do not edit
+```
+
+Example: `src/features/media/detail/` holds the detail page's `components/` and `utils/`.
+
+# Components
+
+- One component per folder: `ComponentName/index.tsx`. Never put several components in one file, not even small private helpers, skeletons or not-found states.
+- A subcomponent used only by one parent goes in `Parent/components/Child/index.tsx`. Reference: `src/components/MyAppShell/components/FooterNav/`.
+- A component used by routes or by sibling components goes in the area's `components/` folder, next to its siblings. Reference: `src/features/media/detail/components/MediaDetailSkeleton/`.
+- Constants or helpers shared by several components go in the area's `utils/` (e.g. `src/features/media/detail/utils/hero-layout.ts`), not exported from one component's file.
+- Import across features with the `#/` alias; use relative paths inside a feature.
