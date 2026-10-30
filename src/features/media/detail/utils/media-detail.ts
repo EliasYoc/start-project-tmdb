@@ -8,7 +8,11 @@ import { TMDBError } from "@lorenzopant/tmdb";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import type { MediaItem } from "#/features/media/cards-layouts/utils/media";
+import {
+	languageName,
+	type MediaItem,
+	releaseYear,
+} from "#/features/media/cards-layouts/utils/media";
 import { tmdb } from "#/integrations/tmdb/tmdb.server";
 
 /**
@@ -163,4 +167,14 @@ export function formatRuntime(minutes: number): string {
 
 export function formatSeasons(count: number): string {
 	return count === 1 ? "1 season" : `${count} seasons`;
+}
+
+/** Length, language and year, skipping whatever TMDB left empty. */
+export function mediaDetailMeta(detail: MediaDetail): string[] {
+	return [
+		detail.runtime ? formatRuntime(detail.runtime) : null,
+		detail.seasonCount ? formatSeasons(detail.seasonCount) : null,
+		languageName(detail.originalLanguage),
+		releaseYear(detail.date),
+	].filter((part): part is string => Boolean(part));
 }
