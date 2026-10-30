@@ -4,44 +4,31 @@ import {
 	Button,
 	Container,
 	Group,
-	Skeleton,
 	Spoiler,
 	Text,
 	Title,
 } from "@mantine/core";
 import {
-	IconArrowLeft,
 	IconPlayerPlay,
 	IconPlayerPlayFilled,
 	IconStar,
 } from "@tabler/icons-react";
-import { Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import {
 	formatRating,
 	languageName,
 	releaseYear,
 } from "#/features/media/cards-layouts/utils/media";
-import { backdropUrl, posterUrl } from "#/integrations/tmdb/images";
+import { posterUrl } from "#/integrations/tmdb/images";
+import { FULL_BLEED, LAYOUT } from "../../utils/hero-layout";
 import {
 	formatRuntime,
 	formatSeasons,
 	type MediaDetail,
 } from "../../utils/media-detail";
 import { TrailerModal } from "../TrailerModal";
-
-/**
- * Bleeds past `AppShell.Main`'s `md` padding so the art reaches the edges, the
- * way the rails do with their own gutters.
- */
-const FULL_BLEED = "-mx-4 -mt-4";
-
-/**
- * Poster column on the left, everything else to its right. On phones the
- * genres and the trailer button drop under both columns to get the full width.
- */
-const LAYOUT =
-	"grid grid-cols-[minmax(0,8.5rem)_minmax(0,1fr)] items-start gap-x-4 gap-y-6 sm:grid-cols-[11rem_minmax(0,1fr)] md:grid-cols-[15rem_minmax(0,1fr)] md:gap-x-10";
+import { BackButton } from "./components/BackButton";
+import { HeroArt } from "./components/HeroArt";
 
 export function MediaDetailHero({ detail }: { detail: MediaDetail }) {
 	const [isTrailerOpen, setTrailerOpen] = useState(false);
@@ -211,145 +198,5 @@ export function MediaDetailHero({ detail }: { detail: MediaDetail }) {
 				/>
 			)}
 		</article>
-	);
-}
-
-/**
- * Art direction: a tall poster fills a phone screen the way the 16:9 backdrop
- * cannot, so phones get the poster and wider screens get the backdrop. Each one
- * stands in for the other when TMDB only has one of them.
- */
-function HeroArt({
-	detail,
-	children,
-}: {
-	detail: MediaDetail;
-	children?: React.ReactNode;
-}) {
-	const backdrop = backdropUrl(detail.backdropPath, "w1280");
-	const portrait = posterUrl(detail.posterPath, "w780") ?? backdrop;
-	const landscape = backdrop ?? portrait;
-
-	return (
-		<div className="absolute inset-x-0 top-0 h-[78svh] overflow-hidden md:h-[80vh]">
-			{landscape && portrait ? (
-				<picture>
-					<source media="(min-width: 48em)" srcSet={landscape} />
-					{/* Decorative: the poster and the h1 below already identify the title. */}
-					<img
-						src={portrait}
-						alt=""
-						fetchPriority="high"
-						className="size-full object-cover object-top"
-					/>
-				</picture>
-			) : (
-				<div className="size-full bg-linear-to-br from-(--mantine-color-brand-9) to-(--mantine-color-dark-7)" />
-			)}
-
-			{/* Fades the art into the page so the text below stays readable. */}
-			<div
-				aria-hidden
-				className="absolute inset-0 bg-linear-to-b from-black/40 via-(--mantine-color-body)/50 via-50% to-(--mantine-color-body)"
-			/>
-			<div
-				aria-hidden
-				className="absolute inset-0 hidden bg-linear-to-r from-(--mantine-color-body)/80 via-transparent md:block"
-			/>
-
-			{children}
-		</div>
-	);
-}
-
-/**
- * Goes back when the user came from inside the app, so the list they were on
- * keeps its scroll position. A deep link has no history, so it falls back to
- * the matching section instead of leaving the site.
- */
-function BackButton({ mediaType }: { mediaType: MediaDetail["mediaType"] }) {
-	const router = useRouter();
-	const canGoBack = useCanGoBack();
-
-	const goBack = () => {
-		if (canGoBack) {
-			router.history.back();
-			return;
-		}
-		router.navigate({ to: mediaType === "movie" ? "/movies" : "/tv-shows" });
-	};
-
-	return (
-		<ActionIcon
-			variant="filled"
-			color="dark"
-			radius="xl"
-			size="xl"
-			aria-label="Go back"
-			onClick={goBack}
-			className="absolute top-4 left-4 bg-black/40 backdrop-blur-md hover:bg-black/60 sm:left-6 lg:left-8"
-		>
-			<IconArrowLeft size={22} />
-		</ActionIcon>
-	);
-}
-
-/** For ids TMDB does not know, or a param that is not an id at all. */
-export function MediaDetailNotFound({
-	mediaType,
-}: {
-	mediaType: MediaDetail["mediaType"];
-}) {
-	const isMovie = mediaType === "movie";
-	return (
-		<Container size="sm" py="xl" className="text-center">
-			<Title order={1} className="text-2xl text-white">
-				{isMovie
-					? "We could not find this movie"
-					: "We could not find this series"}
-			</Title>
-			<Text c="dimmed" mt="sm">
-				The link may be outdated, or TMDB no longer lists this title.
-			</Text>
-			<Button
-				component={Link}
-				to={isMovie ? "/movies" : "/tv-shows"}
-				mt="lg"
-				radius="xl"
-			>
-				{isMovie ? "Browse movies" : "Browse series"}
-			</Button>
-		</Container>
-	);
-}
-
-/** Mirrors the hero's layout so the content does not jump when it arrives. */
-export function MediaDetailSkeleton() {
-	return (
-		<div aria-busy className={`relative ${FULL_BLEED}`}>
-			<Skeleton
-				className="absolute inset-x-0 top-0 h-[78svh] md:h-[80vh]"
-				radius={0}
-			/>
-			<Container
-				size="xl"
-				className="relative px-4 pt-[48svh] pb-10 sm:px-6 md:pt-[38vh] lg:px-8"
-			>
-				<div className={LAYOUT}>
-					<Skeleton radius="lg" className="aspect-2/3 md:row-span-2" />
-					<div>
-						<Skeleton height={18} width={80} radius="sm" />
-						<Skeleton height={32} width="80%" mt="md" radius="sm" />
-						<Skeleton height={14} width="60%" mt="md" radius="sm" />
-						<Skeleton height={12} mt="lg" radius="sm" />
-						<Skeleton height={12} mt={8} radius="sm" />
-						<Skeleton height={12} mt={8} width="70%" radius="sm" />
-					</div>
-					<div className="col-span-2 md:col-span-1 md:col-start-2">
-						<Skeleton height={50} radius="xl" className="md:max-w-60" />
-					</div>
-				</div>
-			</Container>
-		</div>
 	);
 }

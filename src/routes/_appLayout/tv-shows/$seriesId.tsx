@@ -1,9 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import {
-	MediaDetailHero,
-	MediaDetailNotFound,
-	MediaDetailSkeleton,
-} from "#/features/media/detail/components/MediaDetailHero";
+import { MediaDetailHero } from "#/features/media/detail/components/MediaDetailHero";
+import { MediaDetailNotFound } from "#/features/media/detail/components/MediaDetailNotFound";
+import { MediaDetailSkeleton } from "#/features/media/detail/components/MediaDetailSkeleton";
 import {
 	getTVSeriesDetailQueryOptions,
 	parseMediaId,
