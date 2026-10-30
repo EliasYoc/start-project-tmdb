@@ -1,12 +1,13 @@
 import { Skeleton } from "@mantine/core";
 import { IconPlayerPlay, IconStar } from "@tabler/icons-react";
+import { Link } from "@tanstack/react-router";
 import { backdropUrl, posterUrl } from "#/integrations/tmdb/images";
 import { type GenreIndex, genreNames } from "../../utils/genres";
 import {
+	detailLinkOptions,
 	formatRating,
 	type MediaItem,
 	releaseYear,
-	tmdbWebUrl,
 } from "../../utils/media";
 
 /** Rail cards are a fixed width so every rail scrolls on the same rhythm. */
@@ -54,15 +55,13 @@ export function MediaCard({
 					</div>
 				)}
 
-				<a
-					href={tmdbWebUrl(item)}
-					target="_blank"
-					rel="noreferrer"
-					aria-label={`Open ${item.title} on TMDB (opens in a new tab)`}
+				<Link
+					{...detailLinkOptions(item)}
+					aria-label={`View details for ${item.title}`}
 					className="absolute right-3 bottom-3 grid size-11 place-items-center rounded-full bg-black/55 text-white ring-2 ring-(--mantine-color-brand-5) backdrop-blur-sm transition hover:scale-105 hover:bg-(--mantine-color-brand-6) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--mantine-color-brand-4)"
 				>
 					<IconPlayerPlay size={18} fill="currentColor" strokeWidth={0} />
-				</a>
+				</Link>
 			</div>
 
 			<h3 className="mt-3 truncate text-[15px] font-semibold text-white">

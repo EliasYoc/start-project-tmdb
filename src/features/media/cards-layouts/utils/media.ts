@@ -3,6 +3,7 @@ import type {
 	TrendingAllResult,
 	TVSeriesResultItem,
 } from "@lorenzopant/tmdb";
+import { linkOptions } from "@tanstack/react-router";
 import { getLocale } from "#/paraglide/runtime";
 
 /**
@@ -95,9 +96,17 @@ export function languageName(isoCode: string): string | null {
 }
 
 /**
- * Placeholder destination until the in-app record routes exist. Swap the
- * `<a>` in `MediaCard`/`HeroCarousel` for `<Link to="/movies/$movieId">` then.
+ * Where a card leads. Movies and series live in different sections, so the
+ * route and its param name depend on the media type.
  */
-export function tmdbWebUrl(item: Pick<MediaItem, "id" | "mediaType">): string {
-	return `https://www.themoviedb.org/${item.mediaType}/${item.id}`;
+export function detailLinkOptions(item: Pick<MediaItem, "id" | "mediaType">) {
+	return item.mediaType === "movie"
+		? linkOptions({
+				to: "/movies/$movieId",
+				params: { movieId: String(item.id) },
+			})
+		: linkOptions({
+				to: "/tv-shows/$seriesId",
+				params: { seriesId: String(item.id) },
+			});
 }

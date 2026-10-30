@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppLayoutRouteRouteImport } from './routes/_appLayout/route'
 import { Route as AppLayoutIndexRouteImport } from './routes/_appLayout/index'
 import { Route as AppLayoutMoviesIndexRouteImport } from './routes/_appLayout/movies/index'
+import { Route as AppLayoutMoviesMovieIdRouteImport } from './routes/_appLayout/movies/$movieId'
 import { Route as AppLayoutTvShowsIndexRouteImport } from './routes/_appLayout/tv-shows/index'
+import { Route as AppLayoutTvShowsSeriesIdRouteImport } from './routes/_appLayout/tv-shows/$seriesId'
 
 const AppLayoutRouteRoute = AppLayoutRouteRouteImport.update({
   id: '/_appLayout',
@@ -28,19 +30,34 @@ const AppLayoutMoviesIndexRoute = AppLayoutMoviesIndexRouteImport.update({
   path: '/movies/',
   getParentRoute: () => AppLayoutRouteRoute,
 } as any)
+const AppLayoutMoviesMovieIdRoute = AppLayoutMoviesMovieIdRouteImport.update({
+  id: '/movies/$movieId',
+  path: '/movies/$movieId',
+  getParentRoute: () => AppLayoutRouteRoute,
+} as any)
 const AppLayoutTvShowsIndexRoute = AppLayoutTvShowsIndexRouteImport.update({
   id: '/tv-shows/',
   path: '/tv-shows/',
   getParentRoute: () => AppLayoutRouteRoute,
 } as any)
+const AppLayoutTvShowsSeriesIdRoute =
+  AppLayoutTvShowsSeriesIdRouteImport.update({
+    id: '/tv-shows/$seriesId',
+    path: '/tv-shows/$seriesId',
+    getParentRoute: () => AppLayoutRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppLayoutIndexRoute
+  '/movies/$movieId': typeof AppLayoutMoviesMovieIdRoute
+  '/tv-shows/$seriesId': typeof AppLayoutTvShowsSeriesIdRoute
   '/movies/': typeof AppLayoutMoviesIndexRoute
   '/tv-shows/': typeof AppLayoutTvShowsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppLayoutIndexRoute
+  '/movies/$movieId': typeof AppLayoutMoviesMovieIdRoute
+  '/tv-shows/$seriesId': typeof AppLayoutTvShowsSeriesIdRoute
   '/movies': typeof AppLayoutMoviesIndexRoute
   '/tv-shows': typeof AppLayoutTvShowsIndexRoute
 }
@@ -48,18 +65,23 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_appLayout': typeof AppLayoutRouteRouteWithChildren
   '/_appLayout/': typeof AppLayoutIndexRoute
+  '/_appLayout/movies/$movieId': typeof AppLayoutMoviesMovieIdRoute
+  '/_appLayout/tv-shows/$seriesId': typeof AppLayoutTvShowsSeriesIdRoute
   '/_appLayout/movies/': typeof AppLayoutMoviesIndexRoute
   '/_appLayout/tv-shows/': typeof AppLayoutTvShowsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/movies/' | '/tv-shows/'
+  fullPaths:
+    '/' | '/movies/$movieId' | '/tv-shows/$seriesId' | '/movies/' | '/tv-shows/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/movies' | '/tv-shows'
+  to: '/' | '/movies/$movieId' | '/tv-shows/$seriesId' | '/movies' | '/tv-shows'
   id:
     | '__root__'
     | '/_appLayout'
     | '/_appLayout/'
+    | '/_appLayout/movies/$movieId'
+    | '/_appLayout/tv-shows/$seriesId'
     | '/_appLayout/movies/'
     | '/_appLayout/tv-shows/'
   fileRoutesById: FileRoutesById
@@ -91,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutMoviesIndexRouteImport
       parentRoute: typeof AppLayoutRouteRoute
     }
+    '/_appLayout/movies/$movieId': {
+      id: '/_appLayout/movies/$movieId'
+      path: '/movies/$movieId'
+      fullPath: '/movies/$movieId'
+      preLoaderRoute: typeof AppLayoutMoviesMovieIdRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
+    }
     '/_appLayout/tv-shows/': {
       id: '/_appLayout/tv-shows/'
       path: '/tv-shows'
@@ -98,17 +127,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLayoutTvShowsIndexRouteImport
       parentRoute: typeof AppLayoutRouteRoute
     }
+    '/_appLayout/tv-shows/$seriesId': {
+      id: '/_appLayout/tv-shows/$seriesId'
+      path: '/tv-shows/$seriesId'
+      fullPath: '/tv-shows/$seriesId'
+      preLoaderRoute: typeof AppLayoutTvShowsSeriesIdRouteImport
+      parentRoute: typeof AppLayoutRouteRoute
+    }
   }
 }
 
 interface AppLayoutRouteRouteChildren {
   AppLayoutIndexRoute: typeof AppLayoutIndexRoute
+  AppLayoutMoviesMovieIdRoute: typeof AppLayoutMoviesMovieIdRoute
+  AppLayoutTvShowsSeriesIdRoute: typeof AppLayoutTvShowsSeriesIdRoute
   AppLayoutMoviesIndexRoute: typeof AppLayoutMoviesIndexRoute
   AppLayoutTvShowsIndexRoute: typeof AppLayoutTvShowsIndexRoute
 }
 
 const AppLayoutRouteRouteChildren: AppLayoutRouteRouteChildren = {
   AppLayoutIndexRoute: AppLayoutIndexRoute,
+  AppLayoutMoviesMovieIdRoute: AppLayoutMoviesMovieIdRoute,
+  AppLayoutTvShowsSeriesIdRoute: AppLayoutTvShowsSeriesIdRoute,
   AppLayoutMoviesIndexRoute: AppLayoutMoviesIndexRoute,
   AppLayoutTvShowsIndexRoute: AppLayoutTvShowsIndexRoute,
 }
