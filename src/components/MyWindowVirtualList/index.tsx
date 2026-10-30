@@ -10,7 +10,7 @@ type WindowVirtualizerOptions<TItemElement extends Element> = Parameters<
 	typeof useWindowVirtualizer<TItemElement>
 >[0];
 
-type WindowVirtualListProps<TItemElement extends Element> = {
+type MyWindowVirtualListProps<TItemElement extends Element> = {
 	/**
 	 * Options for `useWindowVirtualizer`, read on every render.
 	 * See https://tanstack.com/virtual/latest/docs/api/virtualizer
@@ -114,9 +114,9 @@ type WindowVirtualListProps<TItemElement extends Element> = {
  * Items that aren't rendered can't be found by screen readers or Ctrl+F, so use
  * it for long lists, not short ones.
  */
-export default function WindowVirtualList<
+export default function MyWindowVirtualList<
 	TItemElement extends Element = HTMLDivElement,
->({ renderVirtualItem, getOptions }: WindowVirtualListProps<TItemElement>) {
+>({ renderVirtualItem, getOptions }: MyWindowVirtualListProps<TItemElement>) {
 	const listRef = useRef<HTMLDivElement>(null);
 	const virtualizer = useWindowVirtualizer(getOptions(listRef.current));
 	const totalSize = `${virtualizer.getTotalSize()}px`;

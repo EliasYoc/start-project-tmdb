@@ -100,7 +100,7 @@ tanstackIntent:
 
 ```
 src/
-├── components/            # App-wide components (MyAppShell, WindowVirtualList, icons)
+├── components/            # App-wide components, prefixed `My` (MyAppShell); icons
 ├── features/<feature>/<area>/
 │   ├── components/        # Components of that area, one folder each
 │   └── utils/             # Query options, formatters and constants of that area
@@ -115,6 +115,7 @@ Example: `src/features/media/detail/` holds the detail page's `components/` and 
 # Components
 
 - One component per folder: `ComponentName/index.tsx`. Never put several components in one file, not even small private helpers, skeletons or not-found states.
+- Components you create directly in `src/components/` start with `My`, in both the folder and the component name: `src/components/MyAppShell/` exports `MyAppShell`. This does not apply to components installed by a library CLI (e.g. shadcn), nor to subcomponents inside a `My*` folder (`MyAppShell/components/FooterNav/`).
 - A subcomponent used only by one parent goes in `Parent/components/Child/index.tsx`. Reference: `src/components/MyAppShell/components/FooterNav/`.
 - A component used by routes or by sibling components goes in the area's `components/` folder, next to its siblings. Reference: `src/features/media/detail/components/MediaDetailSkeleton/`.
 - Constants or helpers shared by several components go in the area's `utils/` (e.g. `src/features/media/detail/utils/hero-layout.ts`), not exported from one component's file.
