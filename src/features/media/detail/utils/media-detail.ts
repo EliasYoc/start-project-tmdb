@@ -7,6 +7,7 @@ import type {
 import { TMDBError } from "@lorenzopant/tmdb";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import { compact, maxBy } from "es-toolkit";
 import { z } from "zod";
 import {
 	languageName,
@@ -51,9 +52,10 @@ function pickTrailer(videos: VideoItem[]): Trailer | null {
 	const rank = (video: VideoItem) =>
 		(video.type === "Trailer" ? 2 : video.type === "Teaser" ? 1 : 0) * 2 +
 		(video.official ? 1 : 0);
-	const [best] = youtube
-		.filter((video) => rank(video) >= 2)
-		.sort((a, b) => rank(b) - rank(a));
+	const best = maxBy(
+		youtube.filter((video) => rank(video) >= 2),
+		rank,
+	);
 	return best ? { key: best.key, name: best.name } : null;
 }
 
@@ -171,10 +173,10 @@ export function formatSeasons(count: number): string {
 
 /** Length, language and year, skipping whatever TMDB left empty. */
 export function mediaDetailMeta(detail: MediaDetail): string[] {
-	return [
+	return compact([
 		detail.runtime ? formatRuntime(detail.runtime) : null,
 		detail.seasonCount ? formatSeasons(detail.seasonCount) : null,
 		languageName(detail.originalLanguage),
 		releaseYear(detail.date),
-	].filter((part): part is string => Boolean(part));
+	]);
 }
