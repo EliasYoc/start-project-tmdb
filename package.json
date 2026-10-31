@@ -5,6 +5,13 @@
   "engines": {
     "node": "^24.19.0"
   },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.22.0",
+      "onFail": "error"
+    }
+  },
   "imports": {
     "#/*": "./src/*"
   },
