@@ -1,8 +1,18 @@
 /**
- * Bleeds past `AppShell.Main`'s `md` padding so the art reaches the edges, the
- * way the rails do with their own gutters.
+ * Cancels `AppShell.Main`'s `md` padding so a block reaches the screen edges,
+ * the way the rails do with their own gutters.
  */
-export const FULL_BLEED = "-mx-4 -mt-4";
+export const BLEED_X = "-mx-4";
+
+/** The hero also bleeds past the top padding, so the art starts under the header. */
+export const FULL_BLEED = `${BLEED_X} -mt-4`;
+
+/**
+ * Side padding of every block on the detail page, matching the rails' gutters.
+ * Passed as Mantine's `px` prop rather than Tailwind classes: `Container`'s own
+ * unlayered `padding-inline` beats Tailwind's `@layer utilities`.
+ */
+export const PAGE_GUTTER = { base: 16, sm: 24, lg: 32 };
 
 /**
  * Poster column on the left, everything else to its right. On phones the

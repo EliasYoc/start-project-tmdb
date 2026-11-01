@@ -1,6 +1,8 @@
 import type {
 	Genre,
+	MovieAppendToResponseNamespace,
 	MovieDetailsWithAppends,
+	TVAppendToResponseNamespace,
 	TVDetailsWithAppends,
 	VideoItem,
 } from "@lorenzopant/tmdb";
@@ -15,6 +17,11 @@ import {
 	releaseYear,
 } from "#/features/media/cards-layouts/utils/media";
 import { tmdb } from "#/integrations/tmdb/tmdb.server";
+import {
+	fromMovieCredits,
+	fromTVAggregateCredits,
+	type MediaCredits,
+} from "./media-credits";
 
 /**
  * One record shape for the movie and series screens, so both routes render the
@@ -39,9 +46,24 @@ export type MediaDetail = {
 	runtime: number | null;
 	seasonCount: number | null;
 	trailer: Trailer | null;
+	credits: MediaCredits;
 };
 
 export type Trailer = { key: string; name: string };
+
+/**
+ * Appended to the details request so the whole screen costs one TMDB call.
+ * Series use `aggregate_credits`: plain `credits` only covers the last season.
+ * `satisfies` instead of `as const`: the client wants a mutable array.
+ */
+const MOVIE_APPENDS = [
+	"videos",
+	"credits",
+] satisfies MovieAppendToResponseNamespace[];
+const TV_APPENDS = [
+	"videos",
+	"aggregate_credits",
+] satisfies TVAppendToResponseNamespace[];
 
 /**
  * TMDB lists every clip it has, in no useful order. An official YouTube trailer
@@ -60,7 +82,7 @@ function pickTrailer(videos: VideoItem[]): Trailer | null {
 }
 
 function fromMovieDetails(
-	movie: MovieDetailsWithAppends<["videos"]>,
+	movie: MovieDetailsWithAppends<typeof MOVIE_APPENDS>,
 ): MediaDetail {
 	return {
 		id: movie.id,
@@ -79,11 +101,12 @@ function fromMovieDetails(
 		runtime: movie.runtime || null,
 		seasonCount: null,
 		trailer: pickTrailer(movie.videos.results),
+		credits: fromMovieCredits(movie.credits),
 	};
 }
 
 function fromTVSeriesDetails(
-	series: TVDetailsWithAppends<["videos"]>,
+	series: TVDetailsWithAppends<typeof TV_APPENDS>,
 ): MediaDetail {
 	return {
 		id: series.id,
@@ -101,6 +124,10 @@ function fromTVSeriesDetails(
 		runtime: null,
 		seasonCount: series.number_of_seasons || null,
 		trailer: pickTrailer(series.videos.results),
+		credits: fromTVAggregateCredits(
+			series.aggregate_credits,
+			series.created_by,
+		),
 	};
 }
 
@@ -118,7 +145,7 @@ const fetchMovieDetail = createServerFn()
 		try {
 			const movie = await tmdb.movies.details({
 				movie_id: movieId,
-				append_to_response: ["videos"] as const,
+				append_to_response: MOVIE_APPENDS,
 			});
 			return fromMovieDetails(movie);
 		} catch (error) {
@@ -132,7 +159,7 @@ const fetchTVSeriesDetail = createServerFn()
 		try {
 			const series = await tmdb.tv_series.details({
 				series_id: seriesId,
-				append_to_response: ["videos"] as const,
+				append_to_response: TV_APPENDS,
 			});
 			return fromTVSeriesDetails(series);
 		} catch (error) {

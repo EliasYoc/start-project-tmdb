@@ -1,4 +1,8 @@
-import type { BackdropSize, PosterSize } from "@lorenzopant/tmdb/image";
+import type {
+	BackdropSize,
+	PosterSize,
+	ProfileSize,
+} from "@lorenzopant/tmdb/image";
 import { ImageAPI } from "@lorenzopant/tmdb/image";
 
 /**
@@ -19,4 +23,11 @@ export function backdropUrl(
 	size: BackdropSize = "w1280",
 ): string | null {
 	return path ? images.backdrop(path, size) : null;
+}
+
+export function profileUrl(
+	path: string | undefined,
+	size: ProfileSize = "w185",
+): string | null {
+	return path ? images.profile(path, size) : null;
 }

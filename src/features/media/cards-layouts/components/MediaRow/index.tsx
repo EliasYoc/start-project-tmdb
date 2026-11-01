@@ -48,7 +48,7 @@ export function MediaRow({
 			{...sectionProps}
 			className={className ? `py-4 ${className}` : "py-4"}
 		>
-			<header className="mb-4 flex items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+			<header className="mb-4 flex items-center justify-between gap-4 px-4">
 				<h2 className="text-xl font-bold text-white sm:text-2xl">{title}</h2>
 
 				<div className={`gap-2 ${isScrollable ? "hidden md:flex" : "hidden"}`}>
@@ -89,7 +89,7 @@ export function MediaRow({
 				<ul
 					ref={scrollerRef}
 					aria-busy={isPending}
-					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 px-4 pb-2 sm:scroll-px-6 sm:px-6 lg:scroll-px-8 lg:px-8"
+					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 sm:scroll-px-6 lg:scroll-px-8"
 				>
 					{isPending
 						? Array.from({ length: SKELETON_COUNT }, (_, index) => (

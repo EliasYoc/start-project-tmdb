@@ -30,7 +30,7 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 					Header
 				</Group>
 			</AppShell.Header>
-			<AppShell.Main>{children}</AppShell.Main>
+			<AppShell.Main className="space-y-6">{children}</AppShell.Main>
 			{/* <AppShell.Aside p="md">Aside</AppShell.Aside> */}
 			<FooterNav />
 		</AppShell>

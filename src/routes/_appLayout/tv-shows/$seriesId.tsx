@@ -1,4 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { CastAndCrew } from "#/features/media/detail/components/CastAndCrew";
 import { MediaDetailHero } from "#/features/media/detail/components/MediaDetailHero";
 import { MediaDetailNotFound } from "#/features/media/detail/components/MediaDetailNotFound";
 import { MediaDetailSkeleton } from "#/features/media/detail/components/MediaDetailSkeleton";
@@ -28,5 +29,10 @@ export const Route = createFileRoute("/_appLayout/tv-shows/$seriesId")({
 
 function SeriesDetail() {
 	const series = Route.useLoaderData();
-	return <MediaDetailHero detail={series} />;
+	return (
+		<>
+			<MediaDetailHero detail={series} />
+			<CastAndCrew credits={series.credits} />
+		</>
+	);
 }

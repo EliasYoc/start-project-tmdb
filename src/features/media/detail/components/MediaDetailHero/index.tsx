@@ -1,6 +1,6 @@
 import { Container } from "@mantine/core";
 import { useState } from "react";
-import { FULL_BLEED, LAYOUT } from "../../utils/hero-layout";
+import { FULL_BLEED, LAYOUT, PAGE_GUTTER } from "../../utils/hero-layout";
 import type { MediaDetail } from "../../utils/media-detail";
 import { TrailerModal } from "../TrailerModal";
 import { BackButton } from "./components/BackButton";
@@ -27,7 +27,8 @@ export function MediaDetailHero({ detail }: { detail: MediaDetail }) {
 
 			<Container
 				size="xl"
-				className="relative px-4 pt-[48svh] pb-10 sm:px-6 md:pt-[38vh] lg:px-8"
+				px={PAGE_GUTTER}
+				className="relative pt-[48svh] md:pt-[38vh]"
 			>
 				<div className={LAYOUT}>
 					<HeroPoster posterPath={detail.posterPath} title={detail.title} />

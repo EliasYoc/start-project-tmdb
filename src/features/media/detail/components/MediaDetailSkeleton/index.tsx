@@ -1,5 +1,5 @@
 import { Container, Skeleton } from "@mantine/core";
-import { FULL_BLEED, LAYOUT } from "../../utils/hero-layout";
+import { FULL_BLEED, LAYOUT, PAGE_GUTTER } from "../../utils/hero-layout";
 
 /** Mirrors the hero's layout so the content does not jump when it arrives. */
 export function MediaDetailSkeleton() {
@@ -11,7 +11,8 @@ export function MediaDetailSkeleton() {
 			/>
 			<Container
 				size="xl"
-				className="relative px-4 pt-[48svh] pb-10 sm:px-6 md:pt-[38vh] lg:px-8"
+				px={PAGE_GUTTER}
+				className="relative pt-[48svh] pb-10 md:pt-[38vh]"
 			>
 				<div className={LAYOUT}>
 					<Skeleton radius="lg" className="aspect-2/3 md:row-span-2" />
