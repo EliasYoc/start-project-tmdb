@@ -21,16 +21,20 @@ export function HeroInfo({ detail }: { detail: MediaDetail }) {
 				/>
 			</Group>
 
+			{/* 48px waits for `lg`: from `sm` the navbar narrows this column to ~170px. */}
 			<Title
 				order={1}
 				mt="xs"
-				className="text-2xl leading-tight text-balance text-white sm:text-3xl md:text-5xl"
+				fz={{ base: 24, xs: 30, lg: 48 }}
+				lh={1.25}
+				textWrap="balance"
+				className="text-white"
 			>
 				{detail.title}
 			</Title>
 
 			{meta.length > 0 && (
-				<Text size="sm" c="dimmed" mt={6} className="md:text-base">
+				<Text fz={{ base: "sm", sm: "md" }} c="dimmed" mt={6}>
 					{meta.join(" · ")}
 				</Text>
 			)}
