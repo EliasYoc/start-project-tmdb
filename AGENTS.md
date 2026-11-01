@@ -120,3 +120,10 @@ Example: `src/features/media/detail/` holds the detail page's `components/` and 
 - A component used by routes or by sibling components goes in the area's `components/` folder, next to its siblings. Reference: `src/features/media/detail/components/MediaDetailSkeleton/`.
 - Constants or helpers shared by several components go in the area's `utils/` (e.g. `src/features/media/detail/utils/hero-layout.ts`), not exported from one component's file.
 - Import across features with the `#/` alias; use relative paths inside a feature.
+
+# Styling
+
+- Mantine and Tailwind breakpoints differ: Mantine `sm`/`md`/`lg` = 768/992/1200px, Tailwind = 640/768/1024px. Never size or position one element with both systems.
+- Mantine's component CSS is unlayered and beats Tailwind's `@layer utilities`. For a property the component already sets (`Container` padding, `Title` size), use the Mantine prop, not a class.
+- No responsive style props (`w={{ base, sm }}`) on repeated items (cards, list rows): each instance injects its own `<style>`. Use Tailwind classes or a CSS module.
+- Don't switch layout with `useMatches`/`useMediaQuery`: the server doesn't know the viewport, so the page jumps after hydration. Use CSS media queries.
