@@ -1,3 +1,4 @@
+import { Container } from "@mantine/core";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { MediaRow } from "#/features/media/cards-layouts/components/MediaRow";
 import { CastAndCrew } from "#/features/media/detail/components/CastAndCrew";
@@ -5,6 +6,7 @@ import { MediaDetailHero } from "#/features/media/detail/components/MediaDetailH
 import { MediaDetailNotFound } from "#/features/media/detail/components/MediaDetailNotFound";
 import { MediaDetailSkeleton } from "#/features/media/detail/components/MediaDetailSkeleton";
 import { WhereToWatch } from "#/features/media/detail/components/WhereToWatch";
+
 import {
 	getMovieDetailQueryOptions,
 	parseMediaId,
@@ -37,9 +39,14 @@ function MovieDetail() {
 	return (
 		<>
 			<MediaDetailHero detail={movie} />
-			<WhereToWatch watch={movie.watch} />
-			<CastAndCrew detail={movie} />
-			<MediaRow title="More like this" items={movie.related} />
+			{/* The hero content's column: same bleed, Container and gutters, so
+			    the sections line up with the poster at every width. */}
+
+			<Container size="lg" px={0} className="space-y-6">
+				<WhereToWatch watch={movie.watch} />
+				<CastAndCrew detail={movie} />
+				<MediaRow title="More like this" items={movie.related} />
+			</Container>
 		</>
 	);
 }

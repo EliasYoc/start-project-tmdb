@@ -1,3 +1,4 @@
+import { Container } from "@mantine/core";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { MediaRow } from "#/features/media/cards-layouts/components/MediaRow";
 import { CastAndCrew } from "#/features/media/detail/components/CastAndCrew";
@@ -37,9 +38,14 @@ function SeriesDetail() {
 	return (
 		<>
 			<MediaDetailHero detail={series} />
-			<WhereToWatch watch={series.watch} />
-			<CastAndCrew detail={series} />
-			<MediaRow title="More like this" items={series.related} />
+			{/* The hero content's column: same bleed, Container and gutters, so
+			    the sections line up with the poster at every width. */}
+
+			<Container size="lg" px={0} className="space-y-6">
+				<WhereToWatch watch={series.watch} />
+				<CastAndCrew detail={series} />
+				<MediaRow title="More like this" items={series.related} />
+			</Container>
 		</>
 	);
 }
