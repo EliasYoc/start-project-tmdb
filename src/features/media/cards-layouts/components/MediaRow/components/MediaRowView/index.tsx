@@ -15,6 +15,7 @@ export function MediaRowView({
 	title,
 	items,
 	isError = false,
+	scrollRestorationId,
 	className,
 	...sectionProps
 }: Omit<ComponentProps<"section">, "title" | "children"> & {
@@ -22,6 +23,13 @@ export function MediaRowView({
 	/** `undefined` while the first load is in flight: skeletons stand in. */
 	items: MediaItem[] | undefined;
 	isError?: boolean;
+	/**
+	 * Names the rail for TanStack Router's scroll restoration. Without it the
+	 * router finds the rail by its position in the DOM, so on a route that
+	 * shows other content at the same spot (one title's "More like this", then
+	 * the next one's) the new rail opens where the old one was left.
+	 */
+	scrollRestorationId?: string;
 }) {
 	const { data: genres } = useQuery(getGenresQueryOptions());
 	const scrollerRef = useRef<HTMLUListElement>(null);
@@ -56,6 +64,7 @@ export function MediaRowView({
 				// drop the implicit list role, so it is restated explicitly.
 				<ul
 					ref={scrollerRef}
+					data-scroll-restoration-id={scrollRestorationId}
 					aria-busy={isPending}
 					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 sm:scroll-px-6 lg:scroll-px-8"
 				>

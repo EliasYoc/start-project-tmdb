@@ -11,6 +11,7 @@ function Movies() {
 			<MediaRow
 				title="Trending Movies"
 				query={getTrendingQueryOptions("movies")}
+				scrollRestorationId="trending-movies"
 			/>
 		</>
 	);

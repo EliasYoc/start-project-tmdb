@@ -10,6 +10,7 @@ import { WhereToWatch } from "#/features/media/detail/components/WhereToWatch";
 import {
 	getMovieDetailQueryOptions,
 	parseMediaId,
+	railScrollId,
 } from "#/features/media/detail/utils/media-detail";
 
 export const Route = createFileRoute("/_appLayout/movies/$movieId")({
@@ -39,13 +40,14 @@ function MovieDetail() {
 	return (
 		<>
 			<MediaDetailHero detail={movie} />
-			{/* The hero content's column: same bleed, Container and gutters, so
-			    the sections line up with the poster at every width. */}
-
 			<Container size="lg" px={0} className="space-y-6">
 				<WhereToWatch watch={movie.watch} />
 				<CastAndCrew detail={movie} />
-				<MediaRow title="More like this" items={movie.related} />
+				<MediaRow
+					title="More like this"
+					items={movie.related}
+					scrollRestorationId={railScrollId(movie, "related")}
+				/>
 			</Container>
 		</>
 	);

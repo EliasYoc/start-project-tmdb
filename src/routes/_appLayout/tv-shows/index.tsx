@@ -12,6 +12,7 @@ function TvShows() {
 			<MediaRow
 				title="Trending TV Shows"
 				query={getTrendingQueryOptions("tv")}
+				scrollRestorationId="trending-tv"
 			/>
 		</>
 	);

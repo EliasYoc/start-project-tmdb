@@ -9,6 +9,7 @@ import { WhereToWatch } from "#/features/media/detail/components/WhereToWatch";
 import {
 	getTVSeriesDetailQueryOptions,
 	parseMediaId,
+	railScrollId,
 } from "#/features/media/detail/utils/media-detail";
 
 export const Route = createFileRoute("/_appLayout/tv-shows/$seriesId")({
@@ -38,13 +39,14 @@ function SeriesDetail() {
 	return (
 		<>
 			<MediaDetailHero detail={series} />
-			{/* The hero content's column: same bleed, Container and gutters, so
-			    the sections line up with the poster at every width. */}
-
 			<Container size="lg" px={0} className="space-y-6">
 				<WhereToWatch watch={series.watch} />
 				<CastAndCrew detail={series} />
-				<MediaRow title="More like this" items={series.related} />
+				<MediaRow
+					title="More like this"
+					items={series.related}
+					scrollRestorationId={railScrollId(series, "related")}
+				/>
 			</Container>
 		</>
 	);
