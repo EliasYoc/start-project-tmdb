@@ -26,7 +26,6 @@ export function HeroArt({
 			{landscape && portrait ? (
 				<picture>
 					<source media="(min-width: 48em)" srcSet={landscape} />
-					{/* Decorative: the poster and the h1 below already identify the title. */}
 					<img
 						src={portrait}
 						alt=""
@@ -38,7 +37,6 @@ export function HeroArt({
 				<div className="size-full bg-linear-to-br from-(--mantine-color-brand-9) to-(--mantine-color-dark-7)" />
 			)}
 
-			{/* Fades the art into the page so the text below stays readable. */}
 			<div
 				aria-hidden
 				className="absolute inset-0 bg-linear-to-b from-black/40 via-(--mantine-color-body)/50 via-50% to-(--mantine-color-body)"

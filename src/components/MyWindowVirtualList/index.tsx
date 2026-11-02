@@ -125,8 +125,6 @@ export default function MyWindowVirtualList<
 		<div
 			ref={listRef}
 			className="list relative"
-			// The items are absolutely positioned, so the list takes its length along
-			// the scroll axis from the virtualizer and fills its parent across it.
 			style={
 				virtualizer.options.horizontal
 					? { width: totalSize, height: "100%" }

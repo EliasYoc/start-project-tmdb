@@ -29,8 +29,6 @@ type MediaRowProps = Omit<
  * on pointer devices where there is no thumb to drag.
  */
 export function MediaRow({ query, items, ...props }: MediaRowProps) {
-	// Two components because a hook can't be called conditionally, and only the
-	// `query` path needs `useQuery`.
 	return query ? (
 		<QueryMediaRow {...props} query={query} />
 	) : (

@@ -19,7 +19,13 @@ export function CastList({
 	scrollRestorationId: string;
 }) {
 	return (
-		<ul data-scroll-restoration-id={scrollRestorationId} className={LIST}>
+		// biome-ignore lint/a11y/useSemanticElements: it is already a ul; the role is restated for Safari
+		<ul
+			// biome-ignore lint/a11y/noRedundantRoles: Safari drops the list role from a ul with list-style: none
+			role="list"
+			data-scroll-restoration-id={scrollRestorationId}
+			className={LIST}
+		>
 			{cast.map((person) => (
 				<CastCard key={person.id} person={person} />
 			))}

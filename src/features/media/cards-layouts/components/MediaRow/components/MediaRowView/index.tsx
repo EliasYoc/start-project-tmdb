@@ -35,7 +35,6 @@ export function MediaRowView({
 	const scrollerRef = useRef<HTMLUListElement>(null);
 
 	const isPending = items === undefined;
-	// Nothing to scroll past an error or an empty list, so the arrows go away.
 	const isScrollable = !isError && (isPending || items.length > 0);
 
 	return (
@@ -60,10 +59,11 @@ export function MediaRowView({
 					Nothing here at the moment.
 				</p>
 			) : (
-				// Tailwind's preflight sets list-style: none, which makes Safari/VoiceOver
-				// drop the implicit list role, so it is restated explicitly.
+				// biome-ignore lint/a11y/useSemanticElements: it is already a ul; the role is restated for Safari
 				<ul
 					ref={scrollerRef}
+					// biome-ignore lint/a11y/noRedundantRoles: Safari drops the list role from a ul with list-style: none
+					role="list"
 					data-scroll-restoration-id={scrollRestorationId}
 					aria-busy={isPending}
 					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 sm:scroll-px-6 lg:scroll-px-8"

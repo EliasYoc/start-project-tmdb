@@ -14,8 +14,6 @@ import {
 } from "#/features/media/detail/utils/media-detail";
 
 export const Route = createFileRoute("/_appLayout/movies/$movieId")({
-	// "More like this" links from one movie to another on this same route. A
-	// fresh mount starts the next page collapsed and its rails at the start.
 	remountDeps: ({ params }) => params,
 	loader: async ({ params, context: { queryClient } }) => {
 		const movieId = parseMediaId(params.movieId);
@@ -35,6 +33,10 @@ export const Route = createFileRoute("/_appLayout/movies/$movieId")({
 	notFoundComponent: () => <MediaDetailNotFound mediaType="movie" />,
 });
 
+/**
+ * Mounted fresh for each movie (`remountDeps`): "More like this" stays on this
+ * route, and the next movie must not inherit an expanded synopsis.
+ */
 function MovieDetail() {
 	const movie = Route.useLoaderData();
 	return (

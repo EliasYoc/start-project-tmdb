@@ -21,14 +21,18 @@ export function WatchOfferRow({ offer }: { offer: WatchOffer }) {
 				{LABELS[offer.type]}
 			</Text>
 			<dd>
-				<ul className="flex flex-wrap gap-2">
+				{/* biome-ignore lint/a11y/useSemanticElements: it is already a ul; the role is restated for Safari */}
+				<ul
+					// biome-ignore lint/a11y/noRedundantRoles: Safari drops the list role from a ul with list-style: none
+					role="list"
+					className="flex flex-wrap gap-2"
+				>
 					{offer.services.map((service) => (
 						<li key={service.id}>
 							<Tooltip
 								label={service.name}
 								events={{ hover: true, focus: false, touch: true }}
 							>
-								{/* The ring keeps dark logos visible on the black card. */}
 								<img
 									src={logoUrl(service.logoPath)}
 									alt={service.name}

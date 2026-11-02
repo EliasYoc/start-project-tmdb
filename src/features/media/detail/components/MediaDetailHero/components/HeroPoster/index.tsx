@@ -19,7 +19,6 @@ export function HeroPoster({
 					className="size-full object-cover"
 				/>
 			) : (
-				// Visual stand-in only; the h1 carries the title for assistive tech.
 				<div
 					aria-hidden
 					className="flex size-full items-center justify-center bg-linear-to-br from-(--mantine-color-dark-6) to-(--mantine-color-brand-9) p-3 text-center text-sm font-semibold text-neutral-300"

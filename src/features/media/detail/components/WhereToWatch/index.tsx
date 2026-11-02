@@ -15,8 +15,6 @@ import { WatchOfferRow } from "./components/WatchOfferRow";
 export function WhereToWatch({ watch }: { watch: WatchAvailability }) {
 	return (
 		<DetailSection title="Where to watch">
-			{/* One wrapper: DetailSection pads its direct children, and Mantine's
-			    `Text` resets padding with CSS that beats Tailwind's. */}
 			<div>
 				{watch.offers.length > 0 ? (
 					<dl className="grid gap-4">
@@ -40,7 +38,6 @@ export function WhereToWatch({ watch }: { watch: WatchAvailability }) {
 							target="_blank"
 							rel="noopener noreferrer"
 							size="sm"
-							// A prop, not a class: Anchor's own CSS sets display: inline.
 							display="inline-flex"
 							className="items-center gap-1"
 						>

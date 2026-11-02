@@ -21,7 +21,6 @@ export function HeroInfo({ detail }: { detail: MediaDetail }) {
 				/>
 			</Group>
 
-			{/* 48px waits for `lg`: from `sm` the navbar narrows this column to ~170px. */}
 			<Title
 				order={1}
 				mt="xs"

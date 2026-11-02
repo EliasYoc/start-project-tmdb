@@ -12,7 +12,6 @@ import {
 export function CastCard({ person }: { person: CastMember }) {
 	return (
 		<li className="flex w-24 shrink-0 snap-start flex-col items-center gap-2 text-center md:w-auto md:flex-row md:gap-4 md:text-left">
-			{/* Many people have no photo on TMDB; Avatar falls back to their initials. */}
 			<Avatar
 				src={profileUrl(person.profilePath)}
 				alt={`Photo of ${person.name}`}

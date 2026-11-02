@@ -2,13 +2,12 @@ import { AppShell, Group } from "@mantine/core";
 import { FooterNav } from "./components/FooterNav";
 import { NavbarLinks } from "./components/NavbarLinks";
 
+/** App frame: a bottom tab bar on phones, the side navbar from `sm` up. */
 const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<AppShell
 			layout="alt"
 			header={{ height: 60 }}
-			// Mobile tab bar only; from sm up the navbar takes over and the footer
-			// releases its offset.
 			footer={{ height: { base: 64, sm: 0 } }}
 			navbar={{
 				width: 300,

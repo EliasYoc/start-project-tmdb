@@ -13,6 +13,11 @@ import {
 /** Rail cards are a fixed width so every rail scrolls on the same rhythm. */
 const CARD_WIDTH = "w-[248px] sm:w-[268px] lg:w-[292px]";
 
+/**
+ * The `<li>` must stay `relative`: it contains the absolutely positioned
+ * `sr-only` labels, which would otherwise escape the rail's clipping and widen
+ * the whole page.
+ */
 export function MediaCard({
 	item,
 	genres,
@@ -20,24 +25,16 @@ export function MediaCard({
 	item: MediaItem;
 	genres?: GenreIndex;
 }) {
-	// Backdrops are 16:9 and match the card frame; posters are the fallback when
-	// TMDB has no backdrop for a title, which is common outside the top results.
 	const backdrop = backdropUrl(item.backdropPath, "w780");
 	const image = backdrop ?? posterUrl(item.posterPath, "w500");
-	// The h3 already names the title, so the alt says what the picture is rather
-	// than repeating the title on its own.
 	const alt = backdrop
 		? `Still from ${item.title}`
 		: `Poster for ${item.title}`;
 	const year = releaseYear(item.date);
 	const [genre] = genreNames(item, genres, 1);
-	// An unrated title averages 0, which would read as the worst score possible.
 	const hasRating = item.voteCount > 0;
 
 	return (
-		// `relative` contains the `sr-only` labels (absolutely positioned). Without
-		// it they anchor to the page, escape the rail's overflow clipping and widen
-		// the whole document.
 		<li className={`${CARD_WIDTH} relative shrink-0 snap-start`}>
 			<div className="relative aspect-video overflow-hidden rounded-xl bg-(--mantine-color-dark-6)">
 				{image ? (
@@ -49,7 +46,6 @@ export function MediaCard({
 						className="size-full object-cover"
 					/>
 				) : (
-					// Visual stand-in only; the h3 below carries the title for assistive tech.
 					<div
 						aria-hidden
 						className="flex size-full items-center justify-center bg-linear-to-br from-(--mantine-color-dark-6) to-(--mantine-color-brand-9) px-4 text-center text-sm font-semibold text-neutral-300"

@@ -2,6 +2,7 @@ import { Text } from "@mantine/core";
 import { IconStar } from "@tabler/icons-react";
 import { formatRating } from "#/features/media/cards-layouts/utils/media";
 
+/** Renders nothing for an unrated title: its average of 0 would read as the worst score. */
 export function HeroRating({
 	voteAverage,
 	voteCount,
@@ -9,7 +10,6 @@ export function HeroRating({
 	voteAverage: number;
 	voteCount: number;
 }) {
-	// An unrated title averages 0, which would read as the worst score possible.
 	if (voteCount === 0) return null;
 
 	return (

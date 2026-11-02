@@ -5,7 +5,8 @@ import { useId } from "react";
  * Card for every block below the hero: an h2 under the page's h1, and the
  * heading naming the landmark. Its width comes from the route's `Container`.
  * The side padding goes on each child (`*:px-5`), so a rail inside can scroll
- * out to the card's edge.
+ * out to the card's edge. Wrap Mantine components such as `Text` in an element:
+ * their own padding reset beats that class.
  */
 export function DetailSection({
 	title,
