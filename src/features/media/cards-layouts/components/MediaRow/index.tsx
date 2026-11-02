@@ -1,81 +1,39 @@
-import { useQuery } from "@tanstack/react-query";
-import { type ComponentProps, useRef } from "react";
-import { getGenresQueryOptions } from "../../utils/genres";
+import type { ComponentProps } from "react";
+import type { MediaItem } from "../../utils/media";
 import type { MediaListQueryOptions } from "../../utils/media-list";
-import { MediaCard, MediaCardSkeleton } from "../MediaCard";
-import { RailScrollButtons } from "../RailScrollButtons";
-
-const SKELETON_COUNT = 6;
+import { MediaRowView } from "./components/MediaRowView";
+import { QueryMediaRow } from "./components/QueryMediaRow";
 
 /**
- * The row renders its own content, and `title` is the heading text rather than
- * the HTML tooltip attribute, so both are taken out of the section's props.
+ * Where the cards come from, exactly one of the two:
+ * - `query`: the row fetches them, with skeletons while it waits and a notice
+ *   if it fails.
+ * - `items`: data the parent already has, such as a route loader's, shown as is.
  */
-type MediaRowProps = Omit<ComponentProps<"section">, "title" | "children"> & {
-	title: string;
-	query: MediaListQueryOptions;
-};
+type MediaRowSource =
+	| { query: MediaListQueryOptions; items?: never }
+	| { items: MediaItem[]; query?: never };
+
+/**
+ * `title` is the heading text rather than the HTML tooltip attribute, and the
+ * row renders its own content (see `MediaRowView`).
+ */
+type MediaRowProps = Omit<
+	ComponentProps<typeof MediaRowView>,
+	"items" | "isError"
+> &
+	MediaRowSource;
 
 /**
  * A horizontally scrollable rail of media cards. Swipe on touch, arrow buttons
  * on pointer devices where there is no thumb to drag.
  */
-export function MediaRow({
-	title,
-	query,
-	className,
-	...sectionProps
-}: MediaRowProps) {
-	const { data: items, isPending, isError } = useQuery(query);
-	const { data: genres } = useQuery(getGenresQueryOptions());
-	const scrollerRef = useRef<HTMLUListElement>(null);
-
-	// Nothing to scroll past an error or an empty list, so the arrows go away.
-	const isScrollable = !isError && (isPending || items.length > 0);
-
-	return (
-		<section
-			{...sectionProps}
-			className={className ? `py-4 ${className}` : "py-4"}
-		>
-			<header className="mb-4 flex items-center justify-between gap-4 px-4">
-				<h2 className="text-xl font-bold text-white sm:text-2xl">{title}</h2>
-
-				{isScrollable && (
-					<RailScrollButtons scrollerRef={scrollerRef} title={title} />
-				)}
-			</header>
-
-			{isError ? (
-				<p className="px-4 text-sm text-neutral-400 sm:px-6 lg:px-8">
-					We could not load {title.toLowerCase()} right now.
-				</p>
-			) : !isPending && items.length === 0 ? (
-				<p className="px-4 text-sm text-neutral-400 sm:px-6 lg:px-8">
-					Nothing here at the moment.
-				</p>
-			) : (
-				// Tailwind's preflight sets list-style: none, which makes Safari/VoiceOver
-				// drop the implicit list role, so it is restated explicitly.
-				<ul
-					ref={scrollerRef}
-					aria-busy={isPending}
-					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 sm:scroll-px-6 lg:scroll-px-8"
-				>
-					{isPending
-						? Array.from({ length: SKELETON_COUNT }, (_, index) => (
-								// biome-ignore lint/suspicious/noArrayIndexKey: fixed-length placeholder list
-								<MediaCardSkeleton key={index} />
-							))
-						: items.map((item) => (
-								<MediaCard
-									key={`${item.mediaType}-${item.id}`}
-									item={item}
-									genres={genres}
-								/>
-							))}
-				</ul>
-			)}
-		</section>
+export function MediaRow({ query, items, ...props }: MediaRowProps) {
+	// Two components because a hook can't be called conditionally, and only the
+	// `query` path needs `useQuery`.
+	return query ? (
+		<QueryMediaRow {...props} query={query} />
+	) : (
+		<MediaRowView {...props} items={items} />
 	);
 }
