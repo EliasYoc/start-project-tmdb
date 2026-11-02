@@ -121,6 +121,13 @@ Example: `src/features/media/detail/` holds the detail page's `components/` and 
 - Constants or helpers shared by several components go in the area's `utils/` (e.g. `src/features/media/detail/utils/hero-layout.ts`), not exported from one component's file.
 - Import across features with the `#/` alias; use relative paths inside a feature.
 
+# Comments
+
+- In components (`.tsx`, routes included), the only comments are documentation: a JSDoc block above the component, and a JSDoc line on a prop in its type.
+- Document only what the name and type don't already say. No JSDoc that restates a prop's name.
+- No comments where a component is used or inside its body: no `//` between props explaining why a value is passed, no `{/* … */}` in JSX, no `//` above a statement. If the reason matters, it goes in the component's or the prop's JSDoc.
+- Tool directives (`// biome-ignore …`) are the only exception.
+
 # Styling
 
 - Mantine and Tailwind breakpoints differ: Mantine `sm`/`md`/`lg` = 768/992/1200px, Tailwind = 640/768/1024px. Never size or position one element with both systems.
