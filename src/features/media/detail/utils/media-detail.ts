@@ -9,6 +9,7 @@ import type {
 import { TMDBError } from "@lorenzopant/tmdb";
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
 import { compact, maxBy } from "es-toolkit";
 import { z } from "zod";
 import {
@@ -24,6 +25,11 @@ import {
 	fromTVAggregateCredits,
 	type MediaCredits,
 } from "./media-credits";
+import {
+	pickWatchAvailability,
+	regionFromAcceptLanguage,
+	type WatchAvailability,
+} from "./watch-providers";
 
 /**
  * One record shape for the movie and series screens, so both routes render the
@@ -54,6 +60,7 @@ export type MediaDetail = {
 	 * genres and keywords and comes back empty for many lesser-known titles.
 	 */
 	related: MediaItem[];
+	watch: WatchAvailability;
 };
 
 export type Trailer = { key: string; name: string };
@@ -67,11 +74,13 @@ const MOVIE_APPENDS = [
 	"videos",
 	"credits",
 	"recommendations",
+	"watch/providers",
 ] satisfies MovieAppendToResponseNamespace[];
 const TV_APPENDS = [
 	"videos",
 	"aggregate_credits",
 	"recommendations",
+	"watch/providers",
 ] satisfies TVAppendToResponseNamespace[];
 
 /**
@@ -92,6 +101,7 @@ function pickTrailer(videos: VideoItem[]): Trailer | null {
 
 function fromMovieDetails(
 	movie: MovieDetailsWithAppends<typeof MOVIE_APPENDS>,
+	region: string,
 ): MediaDetail {
 	return {
 		id: movie.id,
@@ -112,11 +122,13 @@ function fromMovieDetails(
 		trailer: pickTrailer(movie.videos.results),
 		credits: fromMovieCredits(movie.credits),
 		related: movie.recommendations.results.map(fromMovie),
+		watch: pickWatchAvailability(movie["watch/providers"].results, region),
 	};
 }
 
 function fromTVSeriesDetails(
 	series: TVDetailsWithAppends<typeof TV_APPENDS>,
+	region: string,
 ): MediaDetail {
 	return {
 		id: series.id,
@@ -139,7 +151,17 @@ function fromTVSeriesDetails(
 			series.created_by,
 		),
 		related: series.recommendations.results.map(fromTVSeries),
+		watch: pickWatchAvailability(series["watch/providers"].results, region),
 	};
+}
+
+/**
+ * Read inside the handler: during SSR that is the page request, and on client
+ * navigation it is the browser's call to the server function, so both send
+ * the same header.
+ */
+function viewerRegion(): string {
+	return regionFromAcceptLanguage(getRequestHeader("accept-language"));
 }
 
 /** A stale or mistyped id is a missing record, not a server failure. */
@@ -158,7 +180,7 @@ const fetchMovieDetail = createServerFn()
 				movie_id: movieId,
 				append_to_response: MOVIE_APPENDS,
 			});
-			return fromMovieDetails(movie);
+			return fromMovieDetails(movie, viewerRegion());
 		} catch (error) {
 			return nullIfNotFound(error);
 		}
@@ -172,7 +194,7 @@ const fetchTVSeriesDetail = createServerFn()
 				series_id: seriesId,
 				append_to_response: TV_APPENDS,
 			});
-			return fromTVSeriesDetails(series);
+			return fromTVSeriesDetails(series, viewerRegion());
 		} catch (error) {
 			return nullIfNotFound(error);
 		}
