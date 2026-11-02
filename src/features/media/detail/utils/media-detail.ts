@@ -12,6 +12,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { compact, maxBy } from "es-toolkit";
 import { z } from "zod";
 import {
+	fromMovie,
+	fromTVSeries,
 	languageName,
 	type MediaItem,
 	releaseYear,
@@ -47,6 +49,11 @@ export type MediaDetail = {
 	seasonCount: number | null;
 	trailer: Trailer | null;
 	credits: MediaCredits;
+	/**
+	 * TMDB's recommendations, as cards. Picked over `similar`, which only matches
+	 * genres and keywords and comes back empty for many lesser-known titles.
+	 */
+	related: MediaItem[];
 };
 
 export type Trailer = { key: string; name: string };
@@ -59,10 +66,12 @@ export type Trailer = { key: string; name: string };
 const MOVIE_APPENDS = [
 	"videos",
 	"credits",
+	"recommendations",
 ] satisfies MovieAppendToResponseNamespace[];
 const TV_APPENDS = [
 	"videos",
 	"aggregate_credits",
+	"recommendations",
 ] satisfies TVAppendToResponseNamespace[];
 
 /**
@@ -102,6 +111,7 @@ function fromMovieDetails(
 		seasonCount: null,
 		trailer: pickTrailer(movie.videos.results),
 		credits: fromMovieCredits(movie.credits),
+		related: movie.recommendations.results.map(fromMovie),
 	};
 }
 
@@ -128,6 +138,7 @@ function fromTVSeriesDetails(
 			series.aggregate_credits,
 			series.created_by,
 		),
+		related: series.recommendations.results.map(fromTVSeries),
 	};
 }
 
@@ -196,6 +207,20 @@ export function formatRuntime(minutes: number): string {
 
 export function formatSeasons(count: number): string {
 	return count === 1 ? "1 season" : `${count} seasons`;
+}
+
+/**
+ * `data-scroll-restoration-id` for a rail on this page. Without it TanStack
+ * Router matches scrolled elements by DOM position and carries them over, so
+ * the next title's rail would open where the last one was left. With a
+ * per-title id each rail starts at the beginning, and Back still returns to
+ * where it was.
+ */
+export function railScrollId(
+	detail: Pick<MediaDetail, "mediaType" | "id">,
+	rail: string,
+): string {
+	return `${detail.mediaType}-${detail.id}-${rail}`;
 }
 
 /** Length, language and year, skipping whatever TMDB left empty. */

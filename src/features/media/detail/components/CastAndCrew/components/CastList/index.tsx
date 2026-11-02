@@ -10,9 +10,16 @@ import { CastCard } from "./components/CastCard";
 const LIST =
 	"no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-5 pb-2 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-5 md:overflow-visible md:pb-0 lg:grid-cols-3";
 
-export function CastList({ cast }: { cast: CastMember[] }) {
+export function CastList({
+	cast,
+	scrollRestorationId,
+}: {
+	cast: CastMember[];
+	/** From `railScrollId`, so the next title's cast starts at the first card. */
+	scrollRestorationId: string;
+}) {
 	return (
-		<ul className={LIST}>
+		<ul data-scroll-restoration-id={scrollRestorationId} className={LIST}>
 			{cast.map((person) => (
 				<CastCard key={person.id} person={person} />
 			))}

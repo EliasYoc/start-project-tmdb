@@ -1,10 +1,9 @@
-import { ActionIcon } from "@mantine/core";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
 import { type ComponentProps, useRef } from "react";
 import { getGenresQueryOptions } from "../../utils/genres";
 import type { MediaListQueryOptions } from "../../utils/media-list";
 import { MediaCard, MediaCardSkeleton } from "../MediaCard";
+import { RailScrollButtons } from "../RailScrollButtons";
 
 const SKELETON_COUNT = 6;
 
@@ -31,15 +30,6 @@ export function MediaRow({
 	const { data: genres } = useQuery(getGenresQueryOptions());
 	const scrollerRef = useRef<HTMLUListElement>(null);
 
-	const scrollBy = (direction: 1 | -1) => {
-		const scroller = scrollerRef.current;
-		if (!scroller) return;
-		scroller.scrollBy({
-			left: direction * scroller.clientWidth * 0.85,
-			behavior: "smooth",
-		});
-	};
-
 	// Nothing to scroll past an error or an empty list, so the arrows go away.
 	const isScrollable = !isError && (isPending || items.length > 0);
 
@@ -51,28 +41,9 @@ export function MediaRow({
 			<header className="mb-4 flex items-center justify-between gap-4 px-4">
 				<h2 className="text-xl font-bold text-white sm:text-2xl">{title}</h2>
 
-				<div className={`gap-2 ${isScrollable ? "hidden md:flex" : "hidden"}`}>
-					<ActionIcon
-						variant="subtle"
-						color="gray"
-						size="lg"
-						radius="xl"
-						aria-label={`Scroll ${title} left`}
-						onClick={() => scrollBy(-1)}
-					>
-						<IconChevronLeft />
-					</ActionIcon>
-					<ActionIcon
-						variant="subtle"
-						color="gray"
-						size="lg"
-						radius="xl"
-						aria-label={`Scroll ${title} right`}
-						onClick={() => scrollBy(1)}
-					>
-						<IconChevronRight />
-					</ActionIcon>
-				</div>
+				{isScrollable && (
+					<RailScrollButtons scrollerRef={scrollerRef} title={title} />
+				)}
 			</header>
 
 			{isError ? (

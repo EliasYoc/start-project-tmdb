@@ -3,12 +3,16 @@ import { CastAndCrew } from "#/features/media/detail/components/CastAndCrew";
 import { MediaDetailHero } from "#/features/media/detail/components/MediaDetailHero";
 import { MediaDetailNotFound } from "#/features/media/detail/components/MediaDetailNotFound";
 import { MediaDetailSkeleton } from "#/features/media/detail/components/MediaDetailSkeleton";
+import { RelatedTitles } from "#/features/media/detail/components/RelatedTitles";
 import {
 	getTVSeriesDetailQueryOptions,
 	parseMediaId,
 } from "#/features/media/detail/utils/media-detail";
 
 export const Route = createFileRoute("/_appLayout/tv-shows/$seriesId")({
+	// "More like this" links from one series to another on this same route. A
+	// fresh mount starts the next page collapsed and its rails at the start.
+	remountDeps: ({ params }) => params,
 	loader: async ({ params, context: { queryClient } }) => {
 		const seriesId = parseMediaId(params.seriesId);
 		if (seriesId === null) throw notFound();
@@ -32,7 +36,8 @@ function SeriesDetail() {
 	return (
 		<>
 			<MediaDetailHero detail={series} />
-			<CastAndCrew credits={series.credits} />
+			<CastAndCrew detail={series} />
+			<RelatedTitles detail={series} />
 		</>
 	);
 }

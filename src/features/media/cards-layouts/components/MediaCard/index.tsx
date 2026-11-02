@@ -35,7 +35,10 @@ export function MediaCard({
 	const hasRating = item.voteCount > 0;
 
 	return (
-		<li className={`${CARD_WIDTH} shrink-0 snap-start`}>
+		// `relative` contains the `sr-only` labels (absolutely positioned). Without
+		// it they anchor to the page, escape the rail's overflow clipping and widen
+		// the whole document.
+		<li className={`${CARD_WIDTH} relative shrink-0 snap-start`}>
 			<div className="relative aspect-video overflow-hidden rounded-xl bg-(--mantine-color-dark-6)">
 				{image ? (
 					<img
