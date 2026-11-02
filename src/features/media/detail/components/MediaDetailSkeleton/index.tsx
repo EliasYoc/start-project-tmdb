@@ -6,7 +6,7 @@ export function MediaDetailSkeleton() {
 	return (
 		<div aria-busy className={`relative ${FULL_BLEED}`}>
 			<Skeleton
-				className="absolute inset-x-0 top-0 h-[78svh] md:h-[80vh]"
+				className="absolute inset-x-0 top-0 h-[78svh] max-h-full md:h-[80vh]"
 				radius={0}
 			/>
 			<Container

@@ -5,6 +5,10 @@ import type { MediaDetail } from "../../../../utils/media-detail";
  * Art direction: a tall poster fills a phone screen the way the 16:9 backdrop
  * cannot, so phones get the poster and wider screens get the backdrop. Each one
  * stands in for the other when TMDB only has one of them.
+ *
+ * Never taller than the hero (`max-h-full`): on tall screens 80vh outgrows the
+ * content, and the art, painted over the page, would cover the next section.
+ * Shrinking it keeps the fade ending in the page color.
  */
 export function HeroArt({
 	detail,
@@ -18,7 +22,7 @@ export function HeroArt({
 	const landscape = backdrop ?? portrait;
 
 	return (
-		<div className="absolute inset-x-0 top-0 h-[78svh] overflow-hidden md:h-[80vh]">
+		<div className="absolute inset-x-0 top-0 h-[78svh] max-h-full overflow-hidden md:h-[80vh]">
 			{landscape && portrait ? (
 				<picture>
 					<source media="(min-width: 48em)" srcSet={landscape} />

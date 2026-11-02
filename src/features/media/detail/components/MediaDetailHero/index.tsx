@@ -25,7 +25,7 @@ export function MediaDetailHero({ detail }: { detail: MediaDetail }) {
 
 			<BackButton mediaType={detail.mediaType} />
 
-			<Container px={0} size="lg" className="relative pt-[48svh] md:pt-[38vh]">
+			<Container size="lg" className="relative pt-[48svh] md:pt-[38vh]">
 				<div className={LAYOUT}>
 					<HeroPoster posterPath={detail.posterPath} title={detail.title} />
 					<HeroInfo detail={detail} />
