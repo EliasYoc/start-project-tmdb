@@ -7,12 +7,9 @@ import { useId } from "react";
  */
 export function DetailSection({
 	title,
-	action,
 	children,
 }: {
 	title: string;
-	/** Controls beside the heading, such as a rail's scroll buttons. */
-	action?: React.ReactNode;
 	children: React.ReactNode;
 }) {
 	const headingId = useId();
@@ -20,12 +17,9 @@ export function DetailSection({
 	return (
 		<section aria-labelledby={headingId} className={`bg-black rounded-2xl`}>
 			<Container size="xl" px={0} className="*:px-5 py-5">
-				<div className="mb-4 flex items-center justify-between gap-4">
-					<Title order={2} size="h3" id={headingId}>
-						{title}
-					</Title>
-					{action}
-				</div>
+				<Title order={2} size="h3" id={headingId} mb="md">
+					{title}
+				</Title>
 				{children}
 			</Container>
 		</section>

@@ -1,9 +1,9 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
+import { MediaRow } from "#/features/media/cards-layouts/components/MediaRow";
 import { CastAndCrew } from "#/features/media/detail/components/CastAndCrew";
 import { MediaDetailHero } from "#/features/media/detail/components/MediaDetailHero";
 import { MediaDetailNotFound } from "#/features/media/detail/components/MediaDetailNotFound";
 import { MediaDetailSkeleton } from "#/features/media/detail/components/MediaDetailSkeleton";
-import { RelatedTitles } from "#/features/media/detail/components/RelatedTitles";
 import {
 	getTVSeriesDetailQueryOptions,
 	parseMediaId,
@@ -37,7 +37,7 @@ function SeriesDetail() {
 		<>
 			<MediaDetailHero detail={series} />
 			<CastAndCrew detail={series} />
-			<RelatedTitles detail={series} />
+			<MediaRow title="More like this" items={series.related} />
 		</>
 	);
 }
