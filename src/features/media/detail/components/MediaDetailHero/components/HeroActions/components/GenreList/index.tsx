@@ -14,7 +14,8 @@ export function GenreList({ genres }: { genres: MediaDetail["genres"] }) {
 						radius="md"
 						tt="none"
 						fw={500}
-						className="bg-white/10 backdrop-blur-sm"
+						vars={() => ({ root: { "--badge-bg": "rgb(255 255 255 / 0.1)" } })}
+						className="backdrop-blur-sm"
 					>
 						{genre.name}
 					</Badge>

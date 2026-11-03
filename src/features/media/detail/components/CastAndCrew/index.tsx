@@ -21,9 +21,11 @@ export function CastAndCrew({ detail }: { detail: MediaDetail }) {
 						scrollRestorationId={railScrollId(detail, "cast")}
 					/>
 				) : (
-					<Text size="sm" c="dimmed">
-						TMDB has no cast listed for this title yet.
-					</Text>
+					<div>
+						<Text size="sm" c="dimmed">
+							TMDB has no cast listed for this title yet.
+						</Text>
+					</div>
 				)}
 			</DetailSection>
 

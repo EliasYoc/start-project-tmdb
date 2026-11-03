@@ -22,7 +22,7 @@ export function HeroOverview({ overview }: { overview: string }) {
 			showLabel="More"
 			hideLabel="Less"
 			mt="sm"
-			className="max-w-3xl"
+			className="max-w-[55ch]"
 			styles={{
 				control: { fontSize: "var(--mantine-font-size-sm)", fontWeight: 600 },
 			}}

@@ -10,7 +10,7 @@ export function HeroPoster({
 	const poster = posterUrl(posterPath, "w500");
 
 	return (
-		<div className="aspect-2/3 overflow-hidden rounded-xl bg-(--mantine-color-dark-6) shadow-2xl ring-1 ring-white/10 md:row-span-2">
+		<div className="aspect-2/3 overflow-hidden rounded-xl bg-(--mantine-color-dark-6) shadow-2xl ring-1 ring-white/10 lg:row-span-2">
 			{poster ? (
 				<img
 					src={poster}

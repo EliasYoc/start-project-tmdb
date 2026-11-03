@@ -30,9 +30,16 @@ export function BackButton({
 			color="dark"
 			radius="xl"
 			size="xl"
+			pos="absolute"
+			vars={() => ({
+				root: {
+					"--ai-bg": "rgb(0 0 0 / 0.4)",
+					"--ai-hover": "rgb(0 0 0 / 0.6)",
+				},
+			})}
 			aria-label="Go back"
 			onClick={goBack}
-			className="absolute top-4 left-4 bg-black/40 backdrop-blur-md hover:bg-black/60 sm:left-6 lg:left-8"
+			className="top-4 left-4 z-10 backdrop-blur-md"
 		>
 			<IconArrowLeft size={22} />
 		</ActionIcon>
