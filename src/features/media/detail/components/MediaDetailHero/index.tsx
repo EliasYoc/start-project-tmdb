@@ -1,9 +1,9 @@
 import { Container } from "@mantine/core";
 import { useState } from "react";
+import { MyBackButton } from "#/components/MyBackButton";
 import { FULL_BLEED, LAYOUT } from "../../utils/hero-layout";
 import type { MediaDetail } from "../../utils/media-detail";
 import { TrailerModal } from "../TrailerModal";
-import { BackButton } from "./components/BackButton";
 import { HeroActions } from "./components/HeroActions";
 import { HeroArt } from "./components/HeroArt";
 import { HeroInfo } from "./components/HeroInfo";
@@ -23,7 +23,13 @@ export function MediaDetailHero({ detail }: { detail: MediaDetail }) {
 				)}
 			</HeroArt>
 
-			<BackButton mediaType={detail.mediaType} />
+			<div className="absolute top-4 left-4 z-10">
+				<MyBackButton
+					fallback={{
+						to: detail.mediaType === "movie" ? "/movies" : "/tv-shows",
+					}}
+				/>
+			</div>
 
 			<Container size="lg" px={0} className="relative pt-[48svh] md:pt-[38vh]">
 				<div className={LAYOUT}>
