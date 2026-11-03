@@ -1,4 +1,5 @@
 import { AppShell, Group } from "@mantine/core";
+import { MyBackButton } from "#/components/MyBackButton";
 import { FooterNav } from "./components/FooterNav";
 import { NavbarLinks } from "./components/NavbarLinks";
 
@@ -26,7 +27,7 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 			</AppShell.Navbar>
 			<AppShell.Header>
 				<Group h="100%" px="md">
-					Header
+					<MyBackButton />
 				</Group>
 			</AppShell.Header>
 			<AppShell.Main className="space-y-6">{children}</AppShell.Main>
