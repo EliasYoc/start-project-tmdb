@@ -112,6 +112,11 @@ src/
 
 Example: `src/features/media/detail/` holds the detail page's `components/` and `utils/`.
 
+# Libraries
+
+- Before using or proposing a library's hook, function, component prop or type, read its official documentation for the installed version, not memory: the matching TanStack Intent command above and the TanStack docs site for TanStack packages, the library's own docs for the rest (Mantine, Tailwind, `@lorenzopant/tmdb`…). If the docs don't cover it, read the package's source in `node_modules`.
+- When proposing or explaining an approach, link the doc page behind each library API it uses, and mark which parts come from the docs, which from the source, and which are your own inference. Never present an inference as documented behavior; verify it (type test, script, browser) or say it is unverified.
+
 # Components
 
 - One component per folder: `ComponentName/index.tsx`. Never put several components in one file, not even small private helpers, skeletons or not-found states.
