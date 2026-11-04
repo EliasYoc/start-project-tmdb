@@ -25,7 +25,10 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 			<AppShell.Navbar visibleFrom="sm">
 				<NavbarLinks />
 			</AppShell.Navbar>
-			<AppShell.Header>
+			<AppShell.Header
+				bg="linear-gradient(to bottom, rgb(0 0 0 / 0.6), transparent)"
+				withBorder={false}
+			>
 				<Group h="100%" px="md">
 					<MyBackButton />
 				</Group>
