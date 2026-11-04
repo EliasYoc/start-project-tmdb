@@ -1,10 +1,12 @@
 /**
  * The hero's box. It cancels `AppShell.Main`'s 16px padding on the sides and
- * top, so the art reaches the screen edges and starts under the header, then
- * pads its content back in, so a `Container size="lg" px={0}` inside lines up
- * with the sections below.
+ * the room Main keeps on top for the header, so the art reaches the screen
+ * edges and starts behind the transparent header. It then pads its content
+ * back in, so a `Container size="lg" px={0}` inside lines up with the sections
+ * below.
  */
-export const FULL_BLEED = "-mx-4 -mt-4 px-4";
+export const FULL_BLEED =
+	"-mx-4 -mt-[calc(var(--app-shell-header-height)+1rem)] px-4";
 
 /**
  * Poster column on the left, everything else to its right. Until `lg` the
