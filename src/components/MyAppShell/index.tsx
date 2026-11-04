@@ -1,4 +1,4 @@
-import { AppShell, Group } from "@mantine/core";
+import { AppShell, Box, Group } from "@mantine/core";
 import { MyBackButton } from "#/components/MyBackButton";
 import { FooterNav } from "./components/FooterNav";
 import { NavbarLinks } from "./components/NavbarLinks";
@@ -25,10 +25,16 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 			<AppShell.Navbar visibleFrom="sm">
 				<NavbarLinks />
 			</AppShell.Navbar>
-			<AppShell.Header
-				bg="linear-gradient(to bottom, rgb(0 0 0 / 0.6), transparent)"
-				withBorder={false}
-			>
+			<AppShell.Header bg="transparent" withBorder={false}>
+				<Box
+					bg="linear-gradient(to bottom, rgb(0 0 0 / 0.9), transparent)"
+					pos="absolute"
+					top={0}
+					left={0}
+					right={0}
+					h="200%"
+					style={{ pointerEvents: "none" }} // para que se pueda dar click en los elementos debajo (detras) del gradiente
+				/>
 				<Group h="100%" px="md">
 					<MyBackButton />
 				</Group>
