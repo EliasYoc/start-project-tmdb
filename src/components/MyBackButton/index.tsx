@@ -17,10 +17,10 @@ export function MyBackButton() {
 
 	return (
 		<ActionIcon
-			variant="transparent"
+			// variant="transparent"
 			radius="xl"
-			// bg="#5dd12d38"
-			size="lg"
+			bg="rgb(228 228 228 / 22%)"
+			size="xl"
 			aria-label="Go back"
 			onClick={() => router.history.back()}
 			className="backdrop-blur-xs"
