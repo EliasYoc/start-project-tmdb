@@ -1,4 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import {
+	createFileRoute,
+	useElementScrollRestoration,
+} from "@tanstack/react-router";
 import MyWindowVirtualList from "#/components/MyWindowVirtualList";
 import { MediaRow } from "#/features/media/cards-layouts/components/MediaRow";
 import { getMediaListQueryOptions } from "#/features/media/cards-layouts/utils/media-list";
@@ -9,34 +12,48 @@ const list = [
 	{
 		title: "Top Rated Series",
 		query: getMediaListQueryOptions("tv/top_rated"),
+		scrollRestorationId: "home-top-rated-series",
 	},
 	{
 		title: "Popular Series",
 		query: getMediaListQueryOptions("tv/popular"),
+		scrollRestorationId: "home-popular-series",
 	},
 	{
 		title: "On The Air Series",
 		query: getMediaListQueryOptions("tv/on_the_air"),
+		scrollRestorationId: "home-on-the-air-series",
 	},
 	{
 		title: "In Theatres",
 		query: getMediaListQueryOptions("movie/now_playing"),
+		scrollRestorationId: "home-in-theatres",
 	},
 	{
 		title: "Upcoming Movies",
 		query: getMediaListQueryOptions("movie/upcoming"),
+		scrollRestorationId: "home-upcoming-movies",
 	},
 	{
 		title: "Popular Movies",
 		query: getMediaListQueryOptions("movie/popular"),
+		scrollRestorationId: "home-popular-movies",
 	},
 	{
 		title: "Top Rated Movies",
 		query: getMediaListQueryOptions("movie/top_rated"),
+		scrollRestorationId: "home-top-rated-movies",
 	},
 ];
 
+/**
+ * On Back, the list starts at the window position TanStack Router saved, so the
+ * rows that were on screen are mounted when the router restores each rail's own
+ * scroll (found by its `scrollRestorationId`).
+ */
 function Home() {
+	const savedScroll = useElementScrollRestoration({ getElement: () => window });
+
 	return (
 		<>
 			<MyWindowVirtualList
@@ -54,6 +71,7 @@ function Home() {
 						}}
 						title={list[item.index].title}
 						query={list[item.index].query}
+						scrollRestorationId={list[item.index].scrollRestorationId}
 					/>
 				)}
 				getOptions={(element) => ({
@@ -62,6 +80,7 @@ function Home() {
 					overscan: 1,
 					scrollMargin: element ? element.offsetTop : 0,
 					gap: 8,
+					...(savedScroll && { initialOffset: savedScroll.scrollY }),
 				})}
 			/>
 
