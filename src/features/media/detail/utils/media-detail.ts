@@ -25,6 +25,7 @@ import {
 	fromTVAggregateCredits,
 	type MediaCredits,
 } from "./media-credits";
+import { fromTVSeasons, type SeriesSeasons } from "./series-seasons";
 import {
 	pickWatchAvailability,
 	regionFromAcceptLanguage,
@@ -61,6 +62,8 @@ export type MediaDetail = {
 	 */
 	related: MediaItem[];
 	watch: WatchAvailability;
+	/** Seasons and what airs next. `null` for movies. */
+	series: SeriesSeasons | null;
 };
 
 export type Trailer = { key: string; name: string };
@@ -123,6 +126,7 @@ function fromMovieDetails(
 		credits: fromMovieCredits(movie.credits),
 		related: movie.recommendations.results.map(fromMovie),
 		watch: pickWatchAvailability(movie["watch/providers"].results, region),
+		series: null,
 	};
 }
 
@@ -152,6 +156,7 @@ function fromTVSeriesDetails(
 		),
 		related: series.recommendations.results.map(fromTVSeries),
 		watch: pickWatchAvailability(series["watch/providers"].results, region),
+		series: fromTVSeasons(series),
 	};
 }
 

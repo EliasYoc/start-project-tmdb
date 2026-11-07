@@ -5,6 +5,7 @@ import { CastAndCrew } from "#/features/media/detail/components/CastAndCrew";
 import { MediaDetailHero } from "#/features/media/detail/components/MediaDetailHero";
 import { MediaDetailNotFound } from "#/features/media/detail/components/MediaDetailNotFound";
 import { MediaDetailSkeleton } from "#/features/media/detail/components/MediaDetailSkeleton";
+import { Seasons } from "#/features/media/detail/components/Seasons";
 import { WhereToWatch } from "#/features/media/detail/components/WhereToWatch";
 import {
 	getTVSeriesDetailQueryOptions,
@@ -43,6 +44,7 @@ function SeriesDetail() {
 			<MediaDetailHero detail={series} />
 			<Container size="lg" px={0} className="space-y-6">
 				<WhereToWatch watch={series.watch} />
+				<Seasons detail={series} />
 				<CastAndCrew detail={series} />
 				<MediaRow
 					title="More like this"

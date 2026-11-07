@@ -10,9 +10,12 @@ import { useId } from "react";
  */
 export function DetailSection({
 	title,
+	action,
 	children,
 }: {
 	title: string;
+	/** At the end of the heading row, such as a rail's arrow buttons. */
+	action?: React.ReactNode;
 	children: React.ReactNode;
 }) {
 	const headingId = useId();
@@ -22,9 +25,12 @@ export function DetailSection({
 			aria-labelledby={headingId}
 			className="rounded-2xl bg-black py-5 *:px-5"
 		>
-			<Title order={2} size="h3" id={headingId} mb="md">
-				{title}
-			</Title>
+			<div className="mb-4 flex items-center justify-between gap-4">
+				<Title order={2} size="h3" id={headingId}>
+					{title}
+				</Title>
+				{action}
+			</div>
 			{children}
 		</section>
 	);
