@@ -64,6 +64,7 @@ export function MediaRowView({
 					ref={scrollerRef}
 					// biome-ignore lint/a11y/noRedundantRoles: Safari drops the list role from a ul with list-style: none
 					role="list"
+					// https://tanstack.com/router/latest/docs/guide/scroll-restoration#manual-scroll-restoration
 					data-scroll-restoration-id={scrollRestorationId}
 					aria-busy={isPending}
 					className="no-scrollbar relative flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-4 sm:scroll-px-6 lg:scroll-px-8"
