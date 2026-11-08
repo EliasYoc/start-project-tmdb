@@ -10,7 +10,7 @@ type WindowVirtualizerOptions<TItemElement extends Element> = Parameters<
 	typeof useWindowVirtualizer<TItemElement>
 >[0];
 
-type WindowVirtualListProps<TItemElement extends Element> = {
+type MyWindowVirtualListProps<TItemElement extends Element> = {
 	/**
 	 * Options for `useWindowVirtualizer`, read on every render.
 	 * See https://tanstack.com/virtual/latest/docs/api/virtualizer
@@ -113,10 +113,20 @@ type WindowVirtualListProps<TItemElement extends Element> = {
  *
  * Items that aren't rendered can't be found by screen readers or Ctrl+F, so use
  * it for long lists, not short ones.
+ *
+ * To keep the page position on Back, return the saved position as
+ * `initialOffset` from `getOptions` (with TanStack Router,
+ * `useElementScrollRestoration({ getElement: () => window })`), so the items
+ * that were on screen are mounted when their own scroll is restored. Only pass
+ * it when there is a saved position: `undefined` replaces the default
+ * `window.scrollY` and the list starts at 0. With TanStack Router, an item with
+ * its own scroller (a rail) also needs a `data-scroll-restoration-id`: its DOM
+ * position changes as items mount and unmount, so the router can't find it by
+ * position.
  */
-export default function WindowVirtualList<
+export default function MyWindowVirtualList<
 	TItemElement extends Element = HTMLDivElement,
->({ renderVirtualItem, getOptions }: WindowVirtualListProps<TItemElement>) {
+>({ renderVirtualItem, getOptions }: MyWindowVirtualListProps<TItemElement>) {
 	const listRef = useRef<HTMLDivElement>(null);
 	const virtualizer = useWindowVirtualizer(getOptions(listRef.current));
 	const totalSize = `${virtualizer.getTotalSize()}px`;
@@ -125,8 +135,6 @@ export default function WindowVirtualList<
 		<div
 			ref={listRef}
 			className="list relative"
-			// The items are absolutely positioned, so the list takes its length along
-			// the scroll axis from the virtualizer and fills its parent across it.
 			style={
 				virtualizer.options.horizontal
 					? { width: totalSize, height: "100%" }
