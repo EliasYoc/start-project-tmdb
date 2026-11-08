@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import { compact } from "es-toolkit";
 import { tmdb } from "#/integrations/tmdb/tmdb.server";
 import type { MediaItem } from "./media";
 
@@ -39,8 +40,5 @@ export function genreNames(
 ): string[] {
 	if (!genres) return [];
 	const byId = genres[item.mediaType];
-	return item.genreIds
-		.map((id) => byId[id])
-		.filter((name): name is string => Boolean(name))
-		.slice(0, limit);
+	return compact(item.genreIds.map((id) => byId[id])).slice(0, limit);
 }

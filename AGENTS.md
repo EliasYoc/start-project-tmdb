@@ -95,3 +95,47 @@ tanstackIntent:
     run: "pnpm dlx @tanstack/intent@latest load @tanstack/virtual-file-routes#virtual-file-routes"
     for: "Programmatic route tree building as an alternative to filesystem conventions: rootRoute, index, route, layout, physical, defineVirtualSubtreeConfig. Use with TanStack Router plugin's virtualRouteConfig option."
 <!-- intent-skills:end -->
+
+# Project structure
+
+```
+src/
+├── components/            # App-wide components, prefixed `My` (MyAppShell); icons
+├── features/<feature>/<area>/
+│   ├── components/        # Components of that area, one folder each
+│   └── utils/             # Query options, formatters and constants of that area
+├── integrations/          # Third-party setup (tmdb, tanstack-query); `*.server.ts` is server-only
+├── routes/                # TanStack Router file routes; keep them thin and import from features
+├── paraglide/             # Generated i18n code, do not edit
+└── routeTree.gen.ts       # Generated, do not edit
+```
+
+Example: `src/features/media/detail/` holds the detail page's `components/` and `utils/`.
+
+# Libraries
+
+- Before using or proposing a library's hook, function, component prop or type, read its official documentation for the installed version, not memory: the matching TanStack Intent command above and the TanStack docs site for TanStack packages, the library's own docs for the rest (Mantine, Tailwind, `@lorenzopant/tmdb`…). If the docs don't cover it, read the package's source in `node_modules`.
+- When proposing or explaining an approach, link the doc page behind each library API it uses, and mark which parts come from the docs, which from the source, and which are your own inference. Never present an inference as documented behavior; verify it (type test, script, browser) or say it is unverified.
+
+# Components
+
+- One component per folder: `ComponentName/index.tsx`. Never put several components in one file, not even small private helpers, skeletons or not-found states.
+- Components you create directly in `src/components/` start with `My`, in both the folder and the component name: `src/components/MyAppShell/` exports `MyAppShell`. This does not apply to components installed by a library CLI (e.g. shadcn), nor to subcomponents inside a `My*` folder (`MyAppShell/components/FooterNav/`).
+- A subcomponent used only by one parent goes in `Parent/components/Child/index.tsx`. Reference: `src/components/MyAppShell/components/FooterNav/`.
+- A component used by routes or by sibling components goes in the area's `components/` folder, next to its siblings. Reference: `src/features/media/detail/components/MediaDetailSkeleton/`.
+- Constants or helpers shared by several components go in the area's `utils/` (e.g. `src/features/media/detail/utils/hero-layout.ts`), not exported from one component's file.
+- Import across features with the `#/` alias; use relative paths inside a feature.
+
+# Comments
+
+- In components (`.tsx`, routes included), the only comments are documentation: a JSDoc block above the component, and a JSDoc line on a prop in its type.
+- Document only what the name and type don't already say. No JSDoc that restates a prop's name.
+- No comments where a component is used or inside its body: no `//` between props explaining why a value is passed, no `{/* … */}` in JSX, no `//` above a statement. If the reason matters, it goes in the component's or the prop's JSDoc.
+- Tool directives (`// biome-ignore …`) are the only exception.
+
+# Styling
+
+- Mantine and Tailwind breakpoints differ: Mantine `sm`/`md`/`lg` = 768/992/1200px, Tailwind = 640/768/1024px. Never size or position one element with both systems.
+- Mantine's component CSS is unlayered and beats Tailwind's `@layer utilities`. For a property the component already sets (`Container` padding, `Title` size), use the Mantine prop, not a class.
+- No responsive style props (`w={{ base, sm }}`) on repeated items (cards, list rows): each instance injects its own `<style>`. Use Tailwind classes or a CSS module.
+- Don't switch layout with `useMatches`/`useMediaQuery`: the server doesn't know the viewport, so the page jumps after hydration. Use CSS media queries.
