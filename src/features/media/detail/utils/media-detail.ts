@@ -21,6 +21,11 @@ import {
 } from "#/features/media/cards-layouts/utils/media";
 import { tmdb } from "#/integrations/tmdb/tmdb.server";
 import {
+	type AgeRating,
+	pickMovieAgeRating,
+	pickSeriesAgeRating,
+} from "./age-rating";
+import {
 	fromMovieCredits,
 	fromTVAggregateCredits,
 	type MediaCredits,
@@ -54,6 +59,8 @@ export type MediaDetail = {
 	/** Minutes. Movies only; series report seasons instead. */
 	runtime: number | null;
 	seasonCount: number | null;
+	/** In the viewer's country, or the US one when theirs has none. */
+	ageRating: AgeRating | null;
 	trailer: Trailer | null;
 	credits: MediaCredits;
 	/**
@@ -78,12 +85,14 @@ const MOVIE_APPENDS = [
 	"credits",
 	"recommendations",
 	"watch/providers",
+	"release_dates",
 ] satisfies MovieAppendToResponseNamespace[];
 const TV_APPENDS = [
 	"videos",
 	"aggregate_credits",
 	"recommendations",
 	"watch/providers",
+	"content_ratings",
 ] satisfies TVAppendToResponseNamespace[];
 
 /**
@@ -122,6 +131,7 @@ function fromMovieDetails(
 		// TMDB stores an unknown runtime as 0 rather than leaving it out.
 		runtime: movie.runtime || null,
 		seasonCount: null,
+		ageRating: pickMovieAgeRating(movie.release_dates.results, region),
 		trailer: pickTrailer(movie.videos.results),
 		credits: fromMovieCredits(movie.credits),
 		related: movie.recommendations.results.map(fromMovie),
@@ -149,6 +159,7 @@ function fromTVSeriesDetails(
 		originalLanguage: series.original_language,
 		runtime: null,
 		seasonCount: series.number_of_seasons || null,
+		ageRating: pickSeriesAgeRating(series.content_ratings.results, region),
 		trailer: pickTrailer(series.videos.results),
 		credits: fromTVAggregateCredits(
 			series.aggregate_credits,

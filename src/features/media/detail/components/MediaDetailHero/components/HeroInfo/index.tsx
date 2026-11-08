@@ -3,6 +3,7 @@ import {
 	type MediaDetail,
 	mediaDetailMeta,
 } from "../../../../utils/media-detail";
+import { AgeRatingBadge } from "./components/AgeRatingBadge";
 import { HeroOverview } from "./components/HeroOverview";
 import { HeroRating } from "./components/HeroRating";
 
@@ -32,8 +33,14 @@ export function HeroInfo({ detail }: { detail: MediaDetail }) {
 				{detail.title}
 			</Title>
 
-			{meta.length > 0 && (
+			{(detail.ageRating || meta.length > 0) && (
 				<Text fz={{ base: "sm", sm: "md" }} c="dimmed" mt={6}>
+					{detail.ageRating && (
+						<AgeRatingBadge
+							ageRating={detail.ageRating}
+							viewerRegion={detail.watch.region}
+						/>
+					)}
 					{meta.join(" · ")}
 				</Text>
 			)}
