@@ -3,13 +3,17 @@ import { MyBackButton } from "#/components/MyBackButton";
 import { FooterNav } from "./components/FooterNav";
 import { NavbarLinks } from "./components/NavbarLinks";
 
-/** App frame: a bottom tab bar on phones, the side navbar from `sm` up. */
+/**
+ * App frame: a bottom tab bar on phones, the side navbar from `sm` up. The
+ * footer height is the floating bar (64px) plus the 12px gap below it, so the
+ * end of the page scrolls clear of the bar.
+ */
 const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<AppShell
 			layout="alt"
 			header={{ height: 60 }}
-			footer={{ height: { base: 64, sm: 0 } }}
+			footer={{ height: { base: 76, sm: 0 } }}
 			navbar={{
 				width: 300,
 				breakpoint: "sm",

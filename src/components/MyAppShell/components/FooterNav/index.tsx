@@ -3,10 +3,18 @@ import { Link } from "@tanstack/react-router";
 import { navLinks } from "../../nav-links";
 import classes from "./FooterNav.module.css";
 
+/**
+ * The phone tab bar: a floating capsule over the bottom of the page, the way
+ * iOS draws it. The page scrolls on underneath and shows through the glass.
+ */
 export function FooterNav() {
 	return (
-		<AppShell.Footer hiddenFrom="sm" className={classes.footer}>
-			<nav aria-label="Main" className={classes.nav}>
+		<AppShell.Footer
+			hiddenFrom="sm"
+			withBorder={false}
+			className={classes.footer}
+		>
+			<nav aria-label="Main" className={classes.bar}>
 				{navLinks.map(
 					({ label, icon: Icon, activeIcon: ActiveIcon, ...link }) => (
 						<Link key={link.to} {...link} className={classes.tab}>
