@@ -1,12 +1,12 @@
 import { AppShell, Box, Group } from "@mantine/core";
 import { MyBackButton } from "#/components/MyBackButton";
 import { FooterNav } from "./components/FooterNav";
-import { NavbarLinks } from "./components/NavbarLinks";
+import { SidebarNav } from "./components/SidebarNav";
 
 /**
- * App frame: a bottom tab bar on phones, the side navbar from `sm` up. The
- * footer height is the floating bar (64px) plus the 12px gap below it, so the
- * end of the page scrolls clear of the bar.
+ * App frame: a floating tab bar on phones, a floating sidebar from `sm` up. The
+ * footer height is the bar (64px) plus the 12px gap below it, so the end of the
+ * page scrolls clear of the bar.
  */
 const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 	return (
@@ -26,9 +26,7 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 			// }}
 			padding="md"
 		>
-			<AppShell.Navbar visibleFrom="sm">
-				<NavbarLinks />
-			</AppShell.Navbar>
+			<SidebarNav />
 			<AppShell.Header bg="transparent" withBorder={false}>
 				{/* <Box
 					bg="linear-gradient(to bottom, rgb(0 0 0 / 0.9), transparent)"

@@ -1,5 +1,6 @@
 import { AppShell } from "@mantine/core";
 import { Link } from "@tanstack/react-router";
+import glassClasses from "../../glass.module.css";
 import { navLinks } from "../../nav-links";
 import classes from "./FooterNav.module.css";
 
@@ -14,7 +15,10 @@ export function FooterNav() {
 			withBorder={false}
 			className={classes.footer}
 		>
-			<nav aria-label="Main" className={classes.bar}>
+			<nav
+				aria-label="Main"
+				className={`${glassClasses.surface} ${classes.bar}`}
+			>
 				{navLinks.map(
 					({ label, icon: Icon, activeIcon: ActiveIcon, ...link }) => (
 						<Link key={link.to} {...link} className={classes.tab}>
