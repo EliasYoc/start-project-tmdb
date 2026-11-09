@@ -26,7 +26,7 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 				<NavbarLinks />
 			</AppShell.Navbar>
 			<AppShell.Header bg="transparent" withBorder={false}>
-				<Box
+				{/* <Box
 					bg="linear-gradient(to bottom, rgb(0 0 0 / 0.9), transparent)"
 					pos="absolute"
 					top={0}
@@ -34,7 +34,7 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 					right={0}
 					h="200%"
 					style={{ pointerEvents: "none" }} // para que se pueda dar click en los elementos debajo (detras) del gradiente
-				/>
+				/> */}
 				<Group h="100%" px="md">
 					<MyBackButton />
 				</Group>
