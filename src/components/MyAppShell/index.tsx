@@ -1,15 +1,19 @@
 import { AppShell, Box, Group } from "@mantine/core";
 import { MyBackButton } from "#/components/MyBackButton";
 import { FooterNav } from "./components/FooterNav";
-import { NavbarLinks } from "./components/NavbarLinks";
+import { SidebarNav } from "./components/SidebarNav";
 
-/** App frame: a bottom tab bar on phones, the side navbar from `sm` up. */
+/**
+ * App frame: a floating tab bar on phones, a floating sidebar from `sm` up. The
+ * footer height is the bar (64px) plus the 12px gap below it, so the end of the
+ * page scrolls clear of the bar.
+ */
 const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<AppShell
 			layout="alt"
 			header={{ height: 60 }}
-			footer={{ height: { base: 64, sm: 0 } }}
+			footer={{ height: { base: 76, sm: 0 } }}
 			navbar={{
 				width: 300,
 				breakpoint: "sm",
@@ -22,11 +26,9 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 			// }}
 			padding="md"
 		>
-			<AppShell.Navbar visibleFrom="sm">
-				<NavbarLinks />
-			</AppShell.Navbar>
+			<SidebarNav />
 			<AppShell.Header bg="transparent" withBorder={false}>
-				<Box
+				{/* <Box
 					bg="linear-gradient(to bottom, rgb(0 0 0 / 0.9), transparent)"
 					pos="absolute"
 					top={0}
@@ -34,7 +36,7 @@ const MyAppShell = ({ children }: { children: React.ReactNode }) => {
 					right={0}
 					h="200%"
 					style={{ pointerEvents: "none" }} // para que se pueda dar click en los elementos debajo (detras) del gradiente
-				/>
+				/> */}
 				<Group h="100%" px="md">
 					<MyBackButton />
 				</Group>
