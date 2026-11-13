@@ -25,12 +25,11 @@
 	border-radius: 999px;
 }
 
+/* Dark values switch on data-mantine-color-scheme rather than light-dark(); see
+   ../../glass.module.css for why. */
 .tab {
 	/* gray-7 rather than Mantine's dimmed: small labels need 4.5:1 on white. */
-	--tab-color: light-dark(
-		var(--mantine-color-gray-7),
-		var(--mantine-color-dark-1)
-	);
+	--tab-color: var(--mantine-color-gray-7);
 
 	flex: 1 1 0;
 	min-width: 0;
@@ -51,15 +50,20 @@
 		background-color 200ms ease;
 }
 
+:where([data-mantine-color-scheme="dark"]) .tab {
+	--tab-color: var(--mantine-color-dark-1);
+}
+
 /* The selected tab sits on its own lighter capsule, so it reads at a glance.
    On dark glass it takes a pale brand tint: the usual brand text color only
    reached 3.5:1 on the capsule. */
 .tab[data-status="active"] {
-	--tab-color: light-dark(
-		var(--mantine-color-brand-7),
-		var(--mantine-color-brand-2)
-	);
-	background-color: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.08));
+	--tab-color: var(--mantine-color-brand-7);
+	background-color: var(--glass-lens);
+}
+
+:where([data-mantine-color-scheme="dark"]) .tab[data-status="active"] {
+	--tab-color: var(--mantine-color-brand-2);
 }
 
 @media (hover: hover) {

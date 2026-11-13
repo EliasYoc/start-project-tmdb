@@ -24,6 +24,6 @@
    the glass, so it would not show. Use the tab bar's lens instead. */
 @media (hover: hover) {
 	.link:not([aria-current="page"]):hover {
-		background-color: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.08));
+		background-color: var(--glass-lens);
 	}
 }
