@@ -1,14 +1,12 @@
 /* AppShell.Footer stays the fixed strip Mantine positions and pads for the home
-   indicator, but it is only a transparent dock now: the bar floats inside it.
-   Mantine paints the footer with --mantine-color-body, so clearing that variable
-   here wins regardless of stylesheet order. Taps between the bar and the screen
-   edges fall through to the page. */
+   indicator, but only as a transparent dock (bg="transparent" on the
+   component): the bar floats inside it, lined up with the page's padding. Taps
+   between the bar and the screen edges fall through to the page. */
 .footer {
-	--mantine-color-body: transparent;
 	display: flex;
 	align-items: flex-end;
 	justify-content: center;
-	padding-inline: 16px;
+	padding-inline: var(--app-shell-padding);
 	pointer-events: none;
 }
 
@@ -27,10 +25,7 @@
 
 .tab {
 	/* gray-7 rather than Mantine's dimmed: small labels need 4.5:1 on white. */
-	--tab-color: light-dark(
-		var(--mantine-color-gray-7),
-		var(--mantine-color-dark-1)
-	);
+	--tab-color: var(--mantine-color-gray-7);
 
 	flex: 1 1 0;
 	min-width: 0;
@@ -51,15 +46,20 @@
 		background-color 200ms ease;
 }
 
+:where([data-mantine-color-scheme="dark"]) .tab {
+	--tab-color: var(--mantine-color-dark-1);
+}
+
 /* The selected tab sits on its own lighter capsule, so it reads at a glance.
    On dark glass it takes a pale brand tint: the usual brand text color only
    reached 3.5:1 on the capsule. */
 .tab[data-status="active"] {
-	--tab-color: light-dark(
-		var(--mantine-color-brand-7),
-		var(--mantine-color-brand-2)
-	);
-	background-color: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.08));
+	--tab-color: var(--mantine-color-brand-7);
+	background-color: var(--glass-lens);
+}
+
+:where([data-mantine-color-scheme="dark"]) .tab[data-status="active"] {
+	--tab-color: var(--mantine-color-brand-2);
 }
 
 @media (hover: hover) {

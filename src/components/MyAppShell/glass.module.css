@@ -1,40 +1,46 @@
 /* The frosted glass both navigation surfaces are made of: the phone tab bar and
    the desktop sidebar. Shape and size stay in each component's own module.
    85% opaque because that is what keeps every label at 4.5:1 or more even with
-   something white behind; 72% dropped the selected tab to 1.4:1. */
-.surface {
-	--glass-color: light-dark(
-		var(--mantine-color-white),
-		var(--mantine-color-dark-6)
-	);
+   something white behind; 72% dropped the selected tab to 1.4:1.
 
-	border: 1px solid light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.12));
+   Light and dark values switch on Mantine's data-mantine-color-scheme
+   attribute, not with light-dark(): the production build (Lightning CSS) turns
+   light-dark() into variables it only defines next to a literal color-scheme,
+   and Mantine sets color-scheme through a variable, so every color came out
+   invalid. :where() keeps the dark rules at the specificity of the light ones,
+   the way Mantine writes its own. */
+.surface {
+	--glass-color: var(--mantine-color-white);
+	--glass-border: rgb(0 0 0 / 0.08);
+	--glass-highlight: rgb(255 255 255 / 0.7);
+	/* The lighter capsule under a selected or hovered item on the glass. */
+	--glass-lens: rgb(0 0 0 / 0.06);
+
+	border: 1px solid var(--glass-border);
 	background-color: color-mix(in srgb, var(--glass-color) 85%, transparent);
+	/* Unprefixed only: the build adds -webkit- for the Safari versions that
+	   need it. Writing both made it keep just the prefixed one, which Chrome
+	   and Firefox ignore. */
 	backdrop-filter: blur(20px) saturate(180%);
-	-webkit-backdrop-filter: blur(20px) saturate(180%);
 	/* A thin highlight along the top edge, where light would catch the glass,
 	   and a soft shadow that lifts it off the page. */
 	box-shadow:
-		inset 0 1px 0 light-dark(rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.1)),
+		inset 0 1px 0 var(--glass-highlight),
 		0 8px 24px rgb(0 0 0 / 0.35),
 		0 2px 6px rgb(0 0 0 / 0.2);
 }
 
-/* Without the blur, or when the system asks for less transparency, see-through
-   would only hurt legibility: the glass turns solid. */
-@supports not (
-		(backdrop-filter: blur(1px)) or
-		(-webkit-backdrop-filter: blur(1px))
-	) {
-	.surface {
-		background-color: var(--glass-color);
-	}
+:where([data-mantine-color-scheme="dark"]) .surface {
+	--glass-color: var(--mantine-color-dark-6);
+	--glass-border: rgb(255 255 255 / 0.12);
+	--glass-highlight: rgb(255 255 255 / 0.1);
+	--glass-lens: rgb(255 255 255 / 0.08);
 }
 
+/* When the system asks for less transparency, the glass turns solid. */
 @media (prefers-reduced-transparency: reduce) {
 	.surface {
 		background-color: var(--glass-color);
 		backdrop-filter: none;
-		-webkit-backdrop-filter: none;
 	}
 }
