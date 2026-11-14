@@ -13,6 +13,7 @@ export function SidebarNav() {
 		<AppShell.Navbar
 			visibleFrom="sm"
 			withBorder={false}
+			bg="transparent"
 			aria-label="Main"
 			className={classes.navbar}
 		>

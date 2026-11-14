@@ -37,17 +37,7 @@
 	--glass-lens: rgb(255 255 255 / 0.08);
 }
 
-/* Without the blur, or when the system asks for less transparency, see-through
-   would only hurt legibility: the glass turns solid. */
-@supports not (
-		(backdrop-filter: blur(1px)) or
-		(-webkit-backdrop-filter: blur(1px))
-	) {
-	.surface {
-		background-color: var(--glass-color);
-	}
-}
-
+/* When the system asks for less transparency, the glass turns solid. */
 @media (prefers-reduced-transparency: reduce) {
 	.surface {
 		background-color: var(--glass-color);

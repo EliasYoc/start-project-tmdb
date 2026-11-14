@@ -1,10 +1,8 @@
 /* AppShell.Navbar stays the fixed column Mantine positions, but only as a
-   transparent dock: the panel floats inside it, inset from the top, bottom and
-   left edges. Mantine paints the navbar with --mantine-color-body, so clearing
-   that variable here removes it. No inset on the right: the page's own padding
-   already keeps the content clear of the panel. */
+   transparent dock (bg="transparent" on the component): the panel floats
+   inside it, inset from the top, bottom and left edges. No inset on the right:
+   the page's own padding already keeps the content clear of the panel. */
 .navbar {
-	--mantine-color-body: transparent;
 	padding: 12px 0 12px 12px;
 	pointer-events: none;
 }
@@ -16,7 +14,6 @@
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	min-height: 0;
 	border-radius: 24px;
 }
 

@@ -13,6 +13,7 @@ export function FooterNav() {
 		<AppShell.Footer
 			hiddenFrom="sm"
 			withBorder={false}
+			bg="transparent"
 			className={classes.footer}
 		>
 			<nav
